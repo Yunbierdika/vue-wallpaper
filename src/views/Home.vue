@@ -6,7 +6,7 @@ import { onMounted } from 'vue'
 import { useAudioVisualizationStore } from '@/stores/audioVisualizationStore'
 import { useClockStore } from '@/stores/clockStore'
 import { storeToRefs } from 'pinia'
-import { customColorAsCSS } from '@/utils'
+import { customColorAsCSS, setBackgroundSize } from '@/utils'
 
 // 音频可视化store
 const audioVisualizationStore = useAudioVisualizationStore()
@@ -73,6 +73,25 @@ onMounted(() => {
       updateProperty(properties.clock_size_of_window, sizeOfWindow)
     }
   }
+
+  // 获取宽度
+  let windowWidth = window.innerWidth
+  // 获取高度
+  let windowHeight = window.innerHeight
+  // 设置背景图片
+  document.body.style.backgroundImage = 'url(background.jpg)'
+  // 设置背景图片大小
+  setBackgroundSize(document.body, windowWidth, windowHeight)
+
+  // 屏幕宽高改变时触发
+  window.addEventListener('resize', () => {
+    // 获取宽度
+    let windowWidth = window.innerWidth
+    // 获取高度
+    let windowHeight = window.innerHeight
+    // 修改背景图片大小
+    setBackgroundSize(document.body, windowWidth, windowHeight)
+  })
 })
 </script>
 
@@ -91,6 +110,5 @@ onMounted(() => {
 .container {
   width: 100%;
   height: 100%;
-  background-color: transparent;
 }
 </style>
