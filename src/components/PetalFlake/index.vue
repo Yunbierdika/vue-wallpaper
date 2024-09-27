@@ -6,7 +6,20 @@ import petalImage3src from '@/assets/images/petal/leaf01.png'
 import petalImage4src from '@/assets/images/petal/leaf02.png'
 
 // 引入配置常量
-import { petalFlakeConfig } from '@/constants'
+import { storeToRefs } from 'pinia'
+import { usePetalFlakeStore } from '@/stores/petalFlakeStore'
+const petalFlakeStore = usePetalFlakeStore()
+const {
+  petalMaxSize,
+  petalWindSpeed,
+  petalWindAngle,
+  petalFallSpeed,
+  petalOpacity,
+  petalCount,
+  petalShadowEnabled,
+  petalShadowColor,
+  petalShadowBlur
+} = storeToRefs(petalFlakeStore)
 
 const petalFakeCanvasRef = ref()
 // 获取设备像素比
@@ -46,16 +59,14 @@ onMounted(() => {
       this.x = Math.random() * petalFakeCanvas.width
       // 花瓣的y坐标，随机生成
       this.y = Math.random() * petalFakeCanvas.height
-      // 花瓣的最大尺寸
-      const maxSize = petalFlakeConfig.size
       // 花瓣的尺寸
-      this.size = maxSize * (0.5 + Math.random() * 0.5)
+      this.size = petalMaxSize.value * (0.5 + Math.random() * 0.5)
       // 花瓣的下落速度
-      this.velocity = (petalFlakeConfig.size * petalFlakeConfig.fallSpeed) / 100
+      this.velocity = (this.size * petalFallSpeed.value) / 100
       // 花瓣的风速
-      this.windSpeed = petalFlakeConfig.windSpeed / this.size
+      this.windSpeed = petalWindSpeed.value / this.size
       // 花瓣的风的角度
-      this.windAngle = (Math.PI / 180) * petalFlakeConfig.windAngle
+      this.windAngle = (Math.PI / 180) * petalWindAngle.value
       // 花瓣的旋转角度，随机生成
       this.rotation = Math.random() * 360
       // 花瓣的旋转方向，随机生成 -1 或 1
@@ -120,17 +131,17 @@ onMounted(() => {
       ctx.beginPath()
       ctx.save()
       // 将透明度应用到绘制上下文
-      ctx.globalAlpha = petalFlakeConfig.opacity
+      ctx.globalAlpha = petalOpacity.value
 
       // 将绘制原点移动到花瓣中心位置
       ctx.translate(this.x + this.size / 2, this.y + this.size / 2)
       // 应用旋转角度
       ctx.rotate((this.rotation * Math.PI) / 180)
 
-      if (petalFlakeConfig.shadowEnabled) {
+      if (petalShadowEnabled.value) {
         // 添加阴影效果
-        ctx.shadowColor = petalFlakeConfig.shadowColor
-        ctx.shadowBlur = petalFlakeConfig.shadowBlur
+        ctx.shadowColor = petalShadowColor.value
+        ctx.shadowBlur = petalShadowBlur.value
         ctx.shadowOffsetX = 0
         ctx.shadowOffsetY = 0
       }
@@ -156,7 +167,7 @@ onMounted(() => {
     )*/
 
     // 循环创建花瓣的实例
-    for (let i = 0; i < petalFlakeConfig.count; i++) {
+    for (let i = 0; i < petalCount.value; i++) {
       petalFlakes.value.push(new PetalFlake())
     }
   }

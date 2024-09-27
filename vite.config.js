@@ -10,7 +10,10 @@ export default defineConfig({
     vue(),
     viteStaticCopy({
       // 打包时配置文件不进行压缩处理
-      targets: [{ src: 'src/project.json', dest: '' }]
+      targets: [
+        { src: 'src/project.json', dest: '' },
+        { src: 'src/constants.js', dest: '' }
+      ]
     })
   ],
   build: {

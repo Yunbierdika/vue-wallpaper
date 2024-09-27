@@ -1,12 +1,15 @@
 <script setup>
-import AudioVisualization from '@/components/AudioVisualization/index.vue'
-// import PetalFlake from '@/components/PetalFlake/index.vue'
-import Clock from '@/components/Clock/index.vue'
 import { onMounted } from 'vue'
+import AudioVisualization from '@/components/AudioVisualization/index.vue'
+import PetalFlake from '@/components/PetalFlake/index.vue'
+import Clock from '@/components/Clock/index.vue'
+import { customColorAsCSS, setBackgroundSize } from '@/utils'
+
+// stores
+import { storeToRefs } from 'pinia'
 import { useAudioVisualizationStore } from '@/stores/audioVisualizationStore'
 import { useClockStore } from '@/stores/clockStore'
-import { storeToRefs } from 'pinia'
-import { customColorAsCSS, setBackgroundSize } from '@/utils'
+import { usePetalFlakeStore } from '@/stores/petalFlakeStore'
 
 // 音频可视化store
 const audioVisualizationStore = useAudioVisualizationStore()
@@ -27,6 +30,16 @@ const {
 const clockStore = useClockStore()
 const { clockEnabled, sizeOfWindow } = storeToRefs(clockStore)
 
+// 花瓣store
+const petalFlakeStore = usePetalFlakeStore()
+const {
+  petalFlakeEnabled,
+  petalOpacity,
+  petalShadowEnabled,
+  petalShadowColor,
+  petalShadowBlur
+} = storeToRefs(petalFlakeStore)
+
 // 修改属性方法
 const updateProperty = (property, ref) => {
   if (property) ref.value = property.value
@@ -40,20 +53,17 @@ onMounted(() => {
         properties.audio_visualization_enabled,
         audioVisualizationEnabled
       )
-
       // 音频可视化颜色配置
       if (properties.audio_bar_color) {
         barColorLeft.value = customColorAsCSS(properties.audio_bar_color.value)
         barColorRight.value = customColorAsCSS(properties.audio_bar_color.value)
       }
-
       // 音频可视化阴影颜色配置
       if (properties.audio_bar_shadow_color) {
         barShadowColor.value = customColorAsCSS(
           properties.audio_bar_shadow_color.value
         )
       }
-
       // 音频响应条阴影宽度
       updateProperty(properties.audio_bar_shadow_blur, barShadowBlur)
       // 音频响应条宽度倍数
@@ -71,6 +81,21 @@ onMounted(() => {
       updateProperty(properties.clock_enabled, clockEnabled)
       // 时钟大小配置
       updateProperty(properties.clock_size_of_window, sizeOfWindow)
+
+      // 花瓣飘落开关配置
+      updateProperty(properties.petal_flake_enabled, petalFlakeEnabled)
+      // 花瓣飘落飘落透明度配置
+      updateProperty(properties.petal_flake_opacity, petalOpacity)
+      // 花瓣飘落阴影效果开启配置
+      updateProperty(properties.petal_flake_shadow_enabled, petalShadowEnabled)
+      // 花瓣飘落阴影颜色配置
+      if (properties.petal_flake_shadow_color) {
+        petalShadowColor.value = customColorAsCSS(
+          properties.petal_flake_shadow_color.value
+        )
+      }
+      // 花瓣飘落阴影扩散程度配置
+      updateProperty(properties.petal_flake_shadow_blur, petalShadowBlur)
     }
   }
 
@@ -102,7 +127,7 @@ onMounted(() => {
     <!-- 音频可视化组件 -->
     <AudioVisualization v-if="audioVisualizationEnabled" />
     <!-- 花瓣飘落组件 -->
-    <!-- <PetalFlake /> -->
+    <PetalFlake v-if="petalFlakeEnabled" />
   </div>
 </template>
 

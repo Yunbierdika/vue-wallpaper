@@ -1,132 +1,249 @@
 {
-  "file": "index.html",
-  "general": {
-    "properties": {
-      "audio_bar_color": {
-        "condition": "audio_visualization_enabled.value == true",
-        "index": 1,
-        "order": 101,
-        "text": "- 音频响应条颜色",
-        "type": "color",
-        "value": "1 1 1"
-      },
-      "audio_bar_height_init": {
-        "condition": "audio_visualization_enabled.value == true",
-        "fraction": false,
-        "index": 5,
-        "max": 100,
-        "min": 0,
-        "order": 105,
-        "text": "- 音频响应条初始高度",
-        "type": "slider",
-        "value": 2
-      },
-      "audio_bar_height_limit": {
-        "condition": "audio_visualization_enabled.value == true",
-        "fraction": true,
-        "index": 6,
-        "max": 1,
-        "min": 0,
-        "order": 106,
-        "precision": 2,
-        "step": 0.1,
-        "text": "- 音频条相对于画布高度限制的倍数",
-        "type": "slider",
-        "value": 0.5
-      },
-      "audio_bar_shadow_blur": {
-        "condition": "audio_visualization_enabled.value == true",
-        "fraction": false,
-        "index": 3,
-        "max": 100,
-        "min": 0,
-        "order": 103,
-        "text": "- 音频响应条阴影宽度",
-        "type": "slider",
-        "value": 50
-      },
-      "audio_bar_shadow_color": {
-        "condition": "audio_visualization_enabled.value == true",
-        "index": 2,
-        "order": 102,
-        "text": "- 音频响应条阴影颜色",
-        "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
-      },
-      "audio_bar_width_multiplier": {
-        "condition": "audio_visualization_enabled.value == true",
-        "fraction": true,
-        "index": 4,
-        "max": 1,
-        "min": 0,
-        "order": 104,
-        "precision": 2,
-        "step": 0.1,
-        "text": "- 音频响应条宽度倍数",
-        "type": "slider",
-        "value": 0.8
-      },
-      "audio_bar_y_offset": {
-        "condition": "audio_visualization_enabled.value == true",
-        "fraction": false,
-        "index": 7,
-        "max": 100,
-        "min": 0,
-        "order": 107,
-        "text": "- 音频响应条Y轴偏移",
-        "type": "slider",
-        "value": 0
-      },
-      "audio_lerp_factor": {
-        "condition": "audio_visualization_enabled.value == true",
-        "fraction": true,
-        "index": 8,
-        "max": 1,
-        "min": 0,
-        "order": 108,
-        "precision": 3,
-        "step": 0.01,
-        "text": "- 音频响应条lerp速度",
-        "type": "slider",
-        "value": 0.5
-      },
-      "audio_visualization_enabled": {
-        "index": 0,
-        "order": 100,
-        "text": "启用音频可视化",
-        "type": "bool",
-        "value": true
-      },
-      "clock_enabled": {
-        "index": 9,
-        "order": 109,
-        "text": "启用时钟",
-        "type": "bool",
-        "value": true
-      },
-      "clock_size_of_window": {
-        "condition": "clock_enabled.value == true",
-        "fraction": true,
-        "index": 10,
-        "max": 1,
-        "min": 0,
-        "order": 110,
-        "precision": 2,
-        "step": 0.1,
-        "text": "时钟相对屏幕的大小",
-        "type": "slider",
-        "value": 0.6
-      },
-      "schemecolor": {
-        "order": 0,
-        "text": "ui_browse_properties_scheme_color",
-        "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
-      }
-    },
-    "supportsaudioprocessing": true
-  },
-  "title": "vue",
-  "type": "web",
-  "version": 0
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"audio_bar_color" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"index" : 1,
+				"order" : 101,
+				"text" : "音频响应条颜色",
+				"type" : "color",
+				"value" : "1 1 1"
+			},
+			"audio_bar_height_init" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"fraction" : false,
+				"index" : 5,
+				"max" : 100,
+				"min" : 0,
+				"order" : 105,
+				"text" : "音频响应条初始高度",
+				"type" : "slider",
+				"value" : 2
+			},
+			"audio_bar_height_limit" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"fraction" : true,
+				"index" : 6,
+				"max" : 1,
+				"min" : 0,
+				"order" : 106,
+				"precision" : 2,
+				"step" : 0.1,
+				"text" : "音频条相对于画布高度限制的倍数",
+				"type" : "slider",
+				"value" : 0.5
+			},
+			"audio_bar_shadow_blur" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"fraction" : false,
+				"index" : 3,
+				"max" : 100,
+				"min" : 0,
+				"order" : 103,
+				"text" : "音频响应条阴影宽度",
+				"type" : "slider",
+				"value" : 50
+			},
+			"audio_bar_shadow_color" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"index" : 2,
+				"order" : 102,
+				"text" : "音频响应条阴影颜色",
+				"type" : "color",
+				"value" : "1 0.5019607843137255 0.7529411764705882"
+			},
+			"audio_bar_width_multiplier" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"fraction" : true,
+				"index" : 4,
+				"max" : 1,
+				"min" : 0,
+				"order" : 104,
+				"precision" : 2,
+				"step" : 0.1,
+				"text" : "音频响应条宽度倍数",
+				"type" : "slider",
+				"value" : 0.8
+			},
+			"audio_bar_y_offset" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"fraction" : false,
+				"index" : 7,
+				"max" : 100,
+				"min" : 0,
+				"order" : 107,
+				"text" : "音频响应条Y轴偏移",
+				"type" : "slider",
+				"value" : 0
+			},
+			"audio_lerp_factor" : 
+			{
+				"condition" : "audio_visualization_enabled.value == true",
+				"fraction" : true,
+				"index" : 8,
+				"max" : 1,
+				"min" : 0,
+				"order" : 108,
+				"precision" : 3,
+				"step" : 0.01,
+				"text" : "音频响应条lerp速度",
+				"type" : "slider",
+				"value" : 0.5
+			},
+			"audio_visualization_enabled" : 
+			{
+				"index" : 0,
+				"order" : 100,
+				"text" : "《启用音频可视化》",
+				"type" : "bool",
+				"value" : true
+			},
+			"clock_enabled" : 
+			{
+				"index" : 9,
+				"order" : 109,
+				"text" : "《启用时钟》",
+				"type" : "bool",
+				"value" : true
+			},
+			"clock_size_of_window" : 
+			{
+				"condition" : "clock_enabled.value == true",
+				"fraction" : true,
+				"index" : 10,
+				"max" : 1,
+				"min" : 0,
+				"order" : 110,
+				"precision" : 2,
+				"step" : 0.1,
+				"text" : "时钟相对屏幕的大小",
+				"type" : "slider",
+				"value" : 0.6
+			},
+			"petal_flake_count" : 
+			{
+				"fraction" : false,
+				"index" : 17,
+				"max" : 200,
+				"min" : 0,
+				"order" : 117,
+				"text" : "花瓣数量",
+				"type" : "slider",
+				"value" : 30
+			},
+			"petal_flake_enabled" : 
+			{
+				"index" : 11,
+				"order" : 111,
+				"text" : "《启用花瓣飘落》",
+				"type" : "bool",
+				"value" : true
+			},
+			"petal_flake_fall_speed" : 
+			{
+				"fraction" : false,
+				"index" : 15,
+				"max" : 100,
+				"min" : 0,
+				"order" : 115,
+				"text" : "花瓣下落速度",
+				"type" : "slider",
+				"value" : 10
+			},
+			"petal_flake_opacity" : 
+			{
+				"fraction" : true,
+				"index" : 16,
+				"max" : 1,
+				"min" : 0,
+				"order" : 116,
+				"precision" : 2,
+				"step" : 0.1,
+				"text" : "花瓣的透明度",
+				"type" : "slider",
+				"value" : 0.5
+			},
+			"petal_flake_shadow_blur" : 
+			{
+				"fraction" : false,
+				"index" : 20,
+				"max" : 50,
+				"min" : 0,
+				"order" : 120,
+				"text" : "花瓣阴影扩散程度",
+				"type" : "slider",
+				"value" : 10
+			},
+			"petal_flake_shadow_color" : 
+			{
+				"index" : 19,
+				"order" : 119,
+				"text" : "花瓣的阴影颜色",
+				"type" : "color",
+				"value" : "1 1 1"
+			},
+			"petal_flake_shadow_enabled" : 
+			{
+				"index" : 18,
+				"order" : 118,
+				"text" : "是否开启花瓣阴影效果",
+				"type" : "bool",
+				"value" : true
+			},
+			"petal_flake_size" : 
+			{
+				"fraction" : false,
+				"index" : 12,
+				"max" : 100,
+				"min" : 0,
+				"order" : 112,
+				"text" : "花瓣大小",
+				"type" : "slider",
+				"value" : 30
+			},
+			"petal_flake_wind_angle" : 
+			{
+				"fraction" : false,
+				"index" : 14,
+				"max" : 360,
+				"min" : 0,
+				"order" : 114,
+				"text" : "花瓣飘落角度",
+				"type" : "slider",
+				"value" : 45
+			},
+			"petal_flake_wind_speed" : 
+			{
+				"fraction" : false,
+				"index" : 13,
+				"max" : 100,
+				"min" : 0,
+				"order" : 113,
+				"text" : "花瓣飘落风速",
+				"type" : "slider",
+				"value" : 50
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "1 0.5019607843137255 0.7529411764705882"
+			}
+		},
+		"supportsaudioprocessing" : true
+	},
+	"title" : "vue",
+	"type" : "web",
+	"version" : 0
 }
