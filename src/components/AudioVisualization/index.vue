@@ -9,8 +9,10 @@ import { storeToRefs } from 'pinia'
 
 const audioVisualizationStore = useAudioVisualizationStore()
 const {
-  barColorLeft,
-  barColorRight,
+  barColor,
+  // barColorLeft,
+  // barColorRight,
+  barShadowEnabled,
   barShadowColor,
   barShadowBlur,
   barWidthMultiplier,
@@ -60,10 +62,22 @@ onMounted(() => {
     const barWidth = Math.min((1.0 / 128.0) * audioCanvas.width)
     const halfCount = audioArray.length / 2
 
-    // 开始绘制红色的左声道
-    ctx.fillStyle = barColorLeft.value
-    ctx.shadowColor = barShadowColor.value
-    ctx.shadowBlur = barShadowBlur.value
+    // 设置音频条颜色
+    ctx.fillStyle = barColor.value
+
+    if (barShadowEnabled.value) {
+      // 添加阴影效果
+      ctx.shadowColor = barShadowColor.value
+      ctx.shadowBlur = barShadowBlur.value
+      ctx.shadowOffsetX = 0
+      ctx.shadowOffsetY = 0
+    } else {
+      ctx.shadowColor = null // 或者使用 'transparent'
+      ctx.shadowBlur = 0
+    }
+
+    // 开始绘制左声道
+    // ctx.fillStyle = barColorLeft.value
     for (let i = 0; i < halfCount; ++i) {
       const lerpHeight =
         audioCanvas.height *
@@ -90,10 +104,8 @@ onMounted(() => {
       previousAudioArray[i] = audioArray[i]
     }
 
-    // 绘制蓝色的右声道
-    ctx.fillStyle = barColorRight.value
-    ctx.shadowColor = barShadowColor.value
-    ctx.shadowBlur = barShadowBlur.value
+    // 绘制右声道
+    // ctx.fillStyle = barColorRight.value
     for (let i = halfCount; i < audioArray.length; ++i) {
       const lerpHeight =
         audioCanvas.height *

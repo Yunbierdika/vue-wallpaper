@@ -7,10 +7,14 @@ export const useAudioVisualizationStore = defineStore(
   () => {
     // 是否开启音频可视化
     const audioVisualizationEnabled = ref(config.audioVisualizationEnabled)
+    // 音频条颜色
+    const barColor = ref(config.barColor)
     // 左声道颜色
-    const barColorLeft = ref(config.barColorLeft)
+    // const barColorLeft = ref(config.barColorLeft)
     // 右声道颜色
-    const barColorRight = ref(config.barColorRight)
+    // const barColorRight = ref(config.barColorRight)
+    // 是否开启音频条阴影
+    const barShadowEnabled = ref(config.barShadowEnabled)
     // 音频条阴影颜色
     const barShadowColor = ref(config.barShadowColor)
     // 音频条的阴影宽度
@@ -28,8 +32,10 @@ export const useAudioVisualizationStore = defineStore(
 
     return {
       audioVisualizationEnabled,
-      barColorLeft,
-      barColorRight,
+      barColor,
+      // barColorLeft,
+      // barColorRight,
+      barShadowEnabled,
       barShadowColor,
       barShadowBlur,
       barWidthMultiplier,

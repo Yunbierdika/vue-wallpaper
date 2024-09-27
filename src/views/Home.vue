@@ -15,8 +15,10 @@ import { usePetalFlakeStore } from '@/stores/petalFlakeStore'
 const audioVisualizationStore = useAudioVisualizationStore()
 const {
   audioVisualizationEnabled,
-  barColorLeft,
-  barColorRight,
+  barColor,
+  // barColorLeft,
+  // barColorRight,
+  barShadowEnabled,
   barShadowColor,
   barShadowBlur,
   barHeightInit,
@@ -55,9 +57,12 @@ onMounted(() => {
       )
       // 音频可视化颜色配置
       if (properties.audio_bar_color) {
-        barColorLeft.value = customColorAsCSS(properties.audio_bar_color.value)
-        barColorRight.value = customColorAsCSS(properties.audio_bar_color.value)
+        // barColorLeft.value = customColorAsCSS(properties.audio_bar_color.value)
+        // barColorRight.value = customColorAsCSS(properties.audio_bar_color.value)
+        barColor.value = customColorAsCSS(properties.audio_bar_color.value)
       }
+      // 音频条阴影开关配置
+      updateProperty(properties.audio_bar_shadow_enabled, barShadowEnabled)
       // 音频可视化阴影颜色配置
       if (properties.audio_bar_shadow_color) {
         barShadowColor.value = customColorAsCSS(

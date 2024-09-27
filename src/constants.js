@@ -2,10 +2,12 @@
 export const audioVisualizationConfig = {
   // 是否开启音频可视化
   audioVisualizationEnabled: true,
+  // 音频条颜色
+  barColor: '#fff',
   // 左声道颜色
-  barColorLeft: '#fff',
+  // barColorLeft: '#fff',
   // 右声道颜色
-  barColorRight: '#fff',
+  // barColorRight: '#fff',
   // 是否开启音频条阴影效果
   barShadowEnabled: true,
   // 音频条阴影颜色
