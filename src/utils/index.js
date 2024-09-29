@@ -1,3 +1,5 @@
+import { watch } from 'vue'
+
 export function getCurrentTime(is_24_hour_clock) {
   var nowTime = new Date()
   var hour =
@@ -47,4 +49,21 @@ export function setBackgroundSize(element, width, height) {
       element.style.backgroundPositionY = '0'
     }
   }
+}
+
+export const waitLoad = (loadSource, cb) => {
+  console.log('source = ', loadSource)
+
+  watch(
+    loadSource,
+    (val, old) => {
+      console.log('val = ', val)
+      console.log('old = ', old)
+
+      if (val) {
+        cb()
+      }
+    },
+    { immediate: true }
+  )
 }

@@ -1,13 +1,11 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
-import { storeToRefs } from 'pinia'
 import { getCurrentTime } from '@/utils'
 import Column from './components/Column.vue'
-// 引入配置常量
 import { useClockStore } from '@/stores/clockStore'
 
+// 获取配置
 const clockStore = useClockStore()
-const { sizeOfWindow } = storeToRefs(clockStore)
 
 // 获取时钟节点
 const clockRef = ref(null)
@@ -21,7 +19,9 @@ let intervalId = null
 
 onMounted(() => {
   // 字体大小计算方式
-  const fontSize = computed(() => (window.innerHeight * sizeOfWindow.value) / 7)
+  const fontSize = computed(
+    () => (window.innerHeight * clockStore.sizeOfWindow) / 7
+  )
 
   const clock = clockRef.value
   const colons = colonRefs.value

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import AudioVisualization from '@/components/AudioVisualization/index.vue'
 import PetalFlake from '@/components/PetalFlake/index.vue'
 import Clock from '@/components/Clock/index.vue'
@@ -10,97 +10,130 @@ import { storeToRefs } from 'pinia'
 import { useAudioVisualizationStore } from '@/stores/audioVisualizationStore'
 import { useClockStore } from '@/stores/clockStore'
 import { usePetalFlakeStore } from '@/stores/petalFlakeStore'
+import { useConfigStore } from '@/stores/configStore'
 
 // 音频可视化store
 const audioVisualizationStore = useAudioVisualizationStore()
-const {
-  audioVisualizationEnabled,
-  barColor,
-  // barColorLeft,
-  // barColorRight,
-  barShadowEnabled,
-  barShadowColor,
-  barShadowBlur,
-  barHeightInit,
-  barHeightLimit,
-  barWidthMultiplier,
-  barYOffset,
-  lerpFactor
-} = storeToRefs(audioVisualizationStore)
 
-// 时钟store
+// stores
 const clockStore = useClockStore()
-const { clockEnabled, sizeOfWindow } = storeToRefs(clockStore)
-
-// 花瓣store
 const petalFlakeStore = usePetalFlakeStore()
-const {
-  petalFlakeEnabled,
-  petalOpacity,
-  petalShadowEnabled,
-  petalShadowColor,
-  petalShadowBlur
-} = storeToRefs(petalFlakeStore)
 
-// 修改属性方法
-const updateProperty = (property, ref) => {
-  if (property) ref.value = property.value
-}
+// 配置store
+const configStore = useConfigStore()
+const { config, isLoaded } = storeToRefs(configStore)
 
 onMounted(() => {
+  // 初始化配置
+  configStore.getConfig()
+  watch(isLoaded, (val) => {
+    if (val) {
+      // 初始化各个store的配置
+      audioVisualizationStore.audioVisualizationConfig =
+        config.value.audioVisualizationConfig
+      petalFlakeStore.petalFlakeConfig = config.value.petalFlakeConfig
+      clockStore.clockConfig = config.value.clockConfig
+
+      configStore.isAllLoaded = true
+    }
+  })
+
+  // 监听配置修改并更新store配置
   window.wallpaperPropertyListener = {
     applyUserProperties: function (properties) {
+      ///////// 音频可视化相关配置 ////////
+
       // 音频可视化开关配置
-      updateProperty(
-        properties.audio_visualization_enabled,
-        audioVisualizationEnabled
-      )
+      if (properties.audio_visualization_enabled) {
+        audioVisualizationStore.audioVisualizationConfig.audioVisualizationEnabled =
+          properties.audio_visualization_enabled.value
+      }
       // 音频可视化颜色配置
       if (properties.audio_bar_color) {
-        // barColorLeft.value = customColorAsCSS(properties.audio_bar_color.value)
-        // barColorRight.value = customColorAsCSS(properties.audio_bar_color.value)
-        barColor.value = customColorAsCSS(properties.audio_bar_color.value)
+        audioVisualizationStore.audioVisualizationConfig.barColor =
+          customColorAsCSS(properties.audio_bar_color.value)
       }
       // 音频条阴影开关配置
-      updateProperty(properties.audio_bar_shadow_enabled, barShadowEnabled)
+      if (properties.audio_bar_shadow_enabled) {
+        audioVisualizationStore.audioVisualizationConfig.barShadowEnabled =
+          properties.audio_bar_shadow_enabled.value
+      }
       // 音频可视化阴影颜色配置
       if (properties.audio_bar_shadow_color) {
-        barShadowColor.value = customColorAsCSS(
-          properties.audio_bar_shadow_color.value
-        )
+        audioVisualizationStore.audioVisualizationConfig.barShadowColor =
+          customColorAsCSS(properties.audio_bar_shadow_color.value)
       }
       // 音频响应条阴影宽度
-      updateProperty(properties.audio_bar_shadow_blur, barShadowBlur)
+      if (properties.audio_bar_shadow_blur) {
+        audioVisualizationStore.audioVisualizationConfig.barShadowBlur =
+          properties.audio_bar_shadow_blur.value
+      }
       // 音频响应条宽度倍数
-      updateProperty(properties.audio_bar_width_multiplier, barWidthMultiplier)
+      if (properties.audio_bar_width_multiplier) {
+        audioVisualizationStore.audioVisualizationConfig.barWidthMultiplier =
+          properties.audio_bar_width_multiplier.value
+      }
       // 音频响应条初始高度
-      updateProperty(properties.audio_bar_height_init, barHeightInit)
+      if (properties.audio_bar_height_init) {
+        audioVisualizationStore.audioVisualizationConfig.barHeightInit =
+          properties.audio_bar_height_init.value
+      }
       // 音频条相对于画布高度限制的倍数
-      updateProperty(properties.audio_bar_height_limit, barHeightLimit)
+      if (properties.audio_bar_height_limit) {
+        audioVisualizationStore.audioVisualizationConfig.barHeightLimit =
+          properties.audio_bar_height_limit.value
+      }
       // 音频响应条Y轴偏移
-      updateProperty(properties.audio_bar_y_offset, barYOffset)
+      if (properties.audio_bar_y_offset) {
+        audioVisualizationStore.audioVisualizationConfig.barYOffset =
+          properties.audio_bar_y_offset.value
+      }
       // 音频响应条lerp速度
-      updateProperty(properties.audio_lerp_factor, lerpFactor)
+      if (properties.audio_lerp_factor) {
+        audioVisualizationStore.audioVisualizationConfig.lerpFactor =
+          properties.audio_lerp_factor.value
+      }
 
-      // 时钟开关配置
-      updateProperty(properties.clock_enabled, clockEnabled)
-      // 时钟大小配置
-      updateProperty(properties.clock_size_of_window, sizeOfWindow)
+      ///////// 花瓣飘落相关配置 ////////
 
       // 花瓣飘落开关配置
-      updateProperty(properties.petal_flake_enabled, petalFlakeEnabled)
+      if (properties.petal_flake_enabled) {
+        petalFlakeStore.petalFlakeConfig.petalFlakeEnabled =
+          properties.petal_flake_enabled.value
+      }
       // 花瓣飘落飘落透明度配置
-      updateProperty(properties.petal_flake_opacity, petalOpacity)
+      if (properties.petal_flake_opacity) {
+        petalFlakeStore.petalFlakeConfig.petalOpacity =
+          properties.petal_flake_opacity.value
+      }
       // 花瓣飘落阴影效果开启配置
-      updateProperty(properties.petal_flake_shadow_enabled, petalShadowEnabled)
+      if (properties.petal_flake_shadow_enabled) {
+        petalFlakeStore.petalFlakeConfig.petalShadowEnabled =
+          properties.petal_flake_shadow_enabled.value
+      }
       // 花瓣飘落阴影颜色配置
       if (properties.petal_flake_shadow_color) {
-        petalShadowColor.value = customColorAsCSS(
+        petalFlakeStore.petalFlakeConfig.petalShadowColor = customColorAsCSS(
           properties.petal_flake_shadow_color.value
         )
       }
       // 花瓣飘落阴影扩散程度配置
-      updateProperty(properties.petal_flake_shadow_blur, petalShadowBlur)
+      if (properties.petal_flake_shadow_blur) {
+        petalFlakeStore.petalFlakeConfig.petalShadowBlur =
+          properties.petal_flake_shadow_blur.value
+      }
+
+      ///////// 时钟相关配置 ////////
+
+      // 时钟开关配置
+      if (properties.clock_enabled) {
+        clockStore.clockConfig.clockEnabled = properties.clock_enabled.value
+      }
+      // 时钟大小配置
+      if (properties.clock_size_of_window) {
+        clockStore.clockConfig.sizeOfWindow =
+          properties.clock_size_of_window.value
+      }
     }
   }
 
@@ -128,11 +161,13 @@ onMounted(() => {
 <template>
   <div class="container">
     <!-- 时钟组件 -->
-    <Clock v-if="clockEnabled" />
+    <Clock v-if="clockStore.clockEnabled" />
     <!-- 音频可视化组件 -->
-    <AudioVisualization v-if="audioVisualizationEnabled" />
+    <AudioVisualization
+      v-if="audioVisualizationStore.audioVisualizationEnabled"
+    />
     <!-- 花瓣飘落组件 -->
-    <PetalFlake v-if="petalFlakeEnabled" />
+    <PetalFlake v-if="petalFlakeStore.petalFlakeEnabled" />
   </div>
 </template>
 

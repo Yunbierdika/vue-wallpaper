@@ -1,25 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import petalImage1src from '@/assets/images/petal/petal01.png'
 import petalImage2src from '@/assets/images/petal/petal02.png'
 import petalImage3src from '@/assets/images/petal/leaf01.png'
 import petalImage4src from '@/assets/images/petal/leaf02.png'
 
-// 引入配置常量
-import { storeToRefs } from 'pinia'
 import { usePetalFlakeStore } from '@/stores/petalFlakeStore'
+import { useConfigStore } from '@/stores/configStore'
+import { storeToRefs } from 'pinia'
+
 const petalFlakeStore = usePetalFlakeStore()
-const {
-  petalMaxSize,
-  petalWindSpeed,
-  petalWindAngle,
-  petalFallSpeed,
-  petalOpacity,
-  petalCount,
-  petalShadowEnabled,
-  petalShadowColor,
-  petalShadowBlur
-} = storeToRefs(petalFlakeStore)
+const configStore = useConfigStore()
+const { isAllLoaded } = storeToRefs(configStore)
 
 const petalFakeCanvasRef = ref()
 // 获取设备像素比
@@ -40,6 +32,8 @@ const petalImages = [petalImage1, petalImage2, petalImage3, petalImage4]
 
 onMounted(() => {
   const petalFakeCanvas = petalFakeCanvasRef.value
+  if (!petalFakeCanvas) return
+
   const ctx = petalFakeCanvas.getContext('2d')
 
   // 定义花瓣的构造函数
@@ -60,13 +54,13 @@ onMounted(() => {
       // 花瓣的y坐标，随机生成
       this.y = Math.random() * petalFakeCanvas.height
       // 花瓣的尺寸
-      this.size = petalMaxSize.value * (0.5 + Math.random() * 0.5)
+      this.size = petalFlakeStore.petalMaxSize * (0.5 + Math.random() * 0.5)
       // 花瓣的下落速度
-      this.velocity = (this.size * petalFallSpeed.value) / 100
+      this.velocity = (this.size * petalFlakeStore.petalFallSpeed) / 100
       // 花瓣的风速
-      this.windSpeed = petalWindSpeed.value / this.size
+      this.windSpeed = petalFlakeStore.petalWindSpeed / this.size
       // 花瓣的风的角度
-      this.windAngle = (Math.PI / 180) * petalWindAngle.value
+      this.windAngle = (Math.PI / 180) * petalFlakeStore.petalWindAngle
       // 花瓣的旋转角度，随机生成
       this.rotation = Math.random() * 360
       // 花瓣的旋转方向，随机生成 -1 或 1
@@ -131,17 +125,17 @@ onMounted(() => {
       ctx.beginPath()
       ctx.save()
       // 将透明度应用到绘制上下文
-      ctx.globalAlpha = petalOpacity.value
+      ctx.globalAlpha = petalFlakeStore.petalOpacity
 
       // 将绘制原点移动到花瓣中心位置
       ctx.translate(this.x + this.size / 2, this.y + this.size / 2)
       // 应用旋转角度
       ctx.rotate((this.rotation * Math.PI) / 180)
 
-      if (petalShadowEnabled.value) {
+      if (petalFlakeStore.petalShadowEnabled) {
         // 添加阴影效果
-        ctx.shadowColor = petalShadowColor.value
-        ctx.shadowBlur = petalShadowBlur.value
+        ctx.shadowColor = petalFlakeStore.petalShadowColor
+        ctx.shadowBlur = petalFlakeStore.petalShadowBlur
         ctx.shadowOffsetX = 0
         ctx.shadowOffsetY = 0
       }
@@ -167,9 +161,11 @@ onMounted(() => {
     )*/
 
     // 循环创建花瓣的实例
-    for (let i = 0; i < petalCount.value; i++) {
-      petalFlakes.value.push(new PetalFlake())
+    for (let i = 0; i < petalFlakeStore.petalCount; i++) {
+      let petalFlake = new PetalFlake()
+      petalFlakes.value.push(petalFlake)
     }
+    // console.log('created = ', petalFlakes.value)
   }
 
   // 重置画布的函数
@@ -193,7 +189,18 @@ onMounted(() => {
   // 监听画布的resize事件,调用resizeCanvas函数
   window.addEventListener('resize', resizeCanvas)
 
-  resizeCanvas()
+  // 监听配置的变化并初始化配置
+  watch(
+    isAllLoaded,
+    (val) => {
+      if (val) {
+        resizeCanvas()
+      }
+    },
+    { immediate: true }
+  )
+
+  // resizeCanvas()
 
   // 渲染函数
   const render = () => {

@@ -12,7 +12,7 @@ export default defineConfig({
       // 打包时配置文件不进行压缩处理
       targets: [
         { src: 'src/project.json', dest: '' },
-        { src: 'src/constants.js', dest: '' }
+        { src: 'src/configuration.json5', dest: '' }
       ]
     })
   ],

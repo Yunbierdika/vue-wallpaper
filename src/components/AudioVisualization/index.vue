@@ -1,26 +1,8 @@
-<template>
-  <canvas id="AudioCanvas" ref="audioCanvasRef"></canvas>
-</template>
-
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { useAudioVisualizationStore } from '@/stores/audioVisualizationStore'
-import { storeToRefs } from 'pinia'
 
 const audioVisualizationStore = useAudioVisualizationStore()
-const {
-  barColor,
-  // barColorLeft,
-  // barColorRight,
-  barShadowEnabled,
-  barShadowColor,
-  barShadowBlur,
-  barWidthMultiplier,
-  barHeightInit,
-  barHeightLimit,
-  barYOffset,
-  lerpFactor
-} = storeToRefs(audioVisualizationStore)
 
 const audioCanvasRef = ref(null)
 // 线性插值函数
@@ -32,15 +14,13 @@ let animationFrameId = null
 
 onMounted(() => {
   const audioCanvas = audioCanvasRef.value
-
   if (!audioCanvas) return
+
   audioCanvas.width = window.innerWidth
   audioCanvas.height = window.innerHeight
 
   // 获取画布的2D上下文
   const ctx = audioCanvas.getContext('2d')
-  // ctx.shadowColor = barShadowColor.value
-  // ctx.shadowBlur = barShadowBlur.value
 
   // 保存前一帧的音频数据以进行插值
   let previousAudioArray = new Array(128).fill(0)
@@ -63,12 +43,12 @@ onMounted(() => {
     const halfCount = audioArray.length / 2
 
     // 设置音频条颜色
-    ctx.fillStyle = barColor.value
+    ctx.fillStyle = audioVisualizationStore.barColor
 
-    if (barShadowEnabled.value) {
+    if (audioVisualizationStore.barShadowEnabled) {
       // 添加阴影效果
-      ctx.shadowColor = barShadowColor.value
-      ctx.shadowBlur = barShadowBlur.value
+      ctx.shadowColor = audioVisualizationStore.barShadowColor
+      ctx.shadowBlur = audioVisualizationStore.barShadowBlur
       ctx.shadowOffsetX = 0
       ctx.shadowOffsetY = 0
     } else {
@@ -77,27 +57,31 @@ onMounted(() => {
     }
 
     // 开始绘制左声道
-    // ctx.fillStyle = barColorLeft.value
     for (let i = 0; i < halfCount; ++i) {
       const lerpHeight =
         audioCanvas.height *
         Math.min(
-          lerp(previousAudioArray[i], audioArray[i], lerpFactor.value),
+          lerp(
+            previousAudioArray[i],
+            audioArray[i],
+            audioVisualizationStore.lerpFactor
+          ),
           1
         )
 
       let height =
-        lerpHeight <= audioCanvas.height * barHeightLimit.value
+        lerpHeight <=
+        audioCanvas.height * audioVisualizationStore.barHeightLimit
           ? lerpHeight
-          : audioCanvas.height * barHeightLimit.value
+          : audioCanvas.height * audioVisualizationStore.barHeightLimit
 
       ctx.fillRect(
         barWidth * i,
         audioCanvas.height -
-          barYOffset.value -
-          Math.max(height, barHeightInit.value),
-        barWidth * barWidthMultiplier.value,
-        Math.max(height, barHeightInit.value)
+          audioVisualizationStore.barYOffset -
+          Math.max(height, audioVisualizationStore.barHeightInit),
+        barWidth * audioVisualizationStore.barWidthMultiplier,
+        Math.max(height, audioVisualizationStore.barHeightInit)
       )
 
       // 更新前一帧数据
@@ -105,27 +89,31 @@ onMounted(() => {
     }
 
     // 绘制右声道
-    // ctx.fillStyle = barColorRight.value
     for (let i = halfCount; i < audioArray.length; ++i) {
       const lerpHeight =
         audioCanvas.height *
         Math.min(
-          lerp(previousAudioArray[i], audioArray[191 - i], lerpFactor.value),
+          lerp(
+            previousAudioArray[i],
+            audioArray[191 - i],
+            audioVisualizationStore.lerpFactor
+          ),
           1
         )
 
       let height =
-        lerpHeight <= audioCanvas.height * barHeightLimit.value
+        lerpHeight <=
+        audioCanvas.height * audioVisualizationStore.barHeightLimit
           ? lerpHeight
-          : audioCanvas.height * barHeightLimit.value
+          : audioCanvas.height * audioVisualizationStore.barHeightLimit
 
       ctx.fillRect(
         barWidth * i,
         audioCanvas.height -
-          barYOffset.value -
-          Math.max(height, barHeightInit.value),
-        barWidth * barWidthMultiplier.value,
-        Math.max(height, barHeightInit.value)
+          audioVisualizationStore.barYOffset -
+          Math.max(height, audioVisualizationStore.barHeightInit),
+        barWidth * audioVisualizationStore.barWidthMultiplier,
+        Math.max(height, audioVisualizationStore.barHeightInit)
       )
 
       // 更新前一帧数据
@@ -144,6 +132,10 @@ onBeforeUnmount(() => {
   }
 })
 </script>
+
+<template>
+  <canvas id="AudioCanvas" ref="audioCanvasRef"></canvas>
+</template>
 
 <style scoped>
 #AudioCanvas {

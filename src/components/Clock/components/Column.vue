@@ -1,11 +1,8 @@
 <script setup>
 import { onMounted, ref, computed, watch } from 'vue'
-import { storeToRefs } from 'pinia'
-// 引入配置常量
 import { useClockStore } from '@/stores/clockStore'
 
 const clockStore = useClockStore()
-const { sizeOfWindow } = storeToRefs(clockStore)
 
 const props = defineProps({
   numLength: Number
@@ -48,7 +45,7 @@ onMounted(() => {
   const column = columnRef.value
   if (column) {
     const fontSize = computed(
-      () => (window.innerHeight * sizeOfWindow.value) / 7
+      () => (window.innerHeight * clockStore.sizeOfWindow) / 7
     )
 
     const updateClockStyles = () => {
