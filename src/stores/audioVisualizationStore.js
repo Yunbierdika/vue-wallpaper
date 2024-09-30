@@ -21,11 +21,11 @@ export const useAudioVisualizationStore = defineStore(
     const barShadowColor = computed(
       () => audioVisualizationConfig.value?.barShadowColor
     )
-    // 音频条的阴影宽度
+    // 音频条的阴影扩散程度
     const barShadowBlur = computed(
       () => audioVisualizationConfig.value?.barShadowBlur
     )
-    // 音频条的宽度
+    // 音频条的宽度系数
     const barWidthMultiplier = computed(
       () => audioVisualizationConfig.value?.barWidthMultiplier
     )

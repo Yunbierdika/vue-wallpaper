@@ -9,9 +9,9 @@
     barShadowEnabled: true,
     // 音频条阴影颜色
     barShadowColor: 'rgba(255, 128, 192, 1)',
-    // 音频条的阴影宽度
+    // 音频条的阴影扩散程度
     barShadowBlur: 50,
-    // 音频条的宽度
+    // 音频条的宽度系数
     barWidthMultiplier: 0.8,
     // 音频条的初始高度
     barHeightInit: 2,
