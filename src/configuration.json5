@@ -4,11 +4,11 @@
     // 是否开启音频可视化
     audioVisualizationEnabled: true,
     // 音频条颜色
-    barColor: '#fff',
+    barColor: 'rgb(255, 255, 255)',
     // 是否开启音频条阴影效果
     barShadowEnabled: true,
     // 音频条阴影颜色
-    barShadowColor: 'rgba(255, 128, 192, 1)',
+    barShadowColor: 'rgb(255, 128, 192)',
     // 音频条的阴影扩散程度
     barShadowBlur: 50,
     // 音频条的宽度系数
@@ -18,7 +18,7 @@
     // 音频条限制高度（限制值为屏幕高度X此数）
     barHeightLimit: 0.5,
     // 音频条Y轴偏移量
-    barYOffset: 60,
+    barYOffset: 0,
     // 插值因子（推荐0.0~0.5之间，越大越平滑）
     lerpFactor: 0.5
   },
@@ -27,9 +27,9 @@
     // 是否开启花瓣飘落效果
     petalFlakeEnabled: true,
     // 花瓣的最大尺寸（实际尺寸为：这个值 * 0.5到1的随机数）
-    petalMaxSize: 30,
+    petalMaxSize: 50,
     // 花瓣的风速（实际速度为：这个值 / 尺寸）
-    petalWindSpeed: 100,
+    petalWindSpeed: 150,
     // 花瓣飘落角度（90度为垂直向下）
     petalWindAngle: 45,
     // 花瓣的下落速度（实际速度为：尺寸 * 这个值）
@@ -37,12 +37,12 @@
     // 花瓣的透明度
     petalOpacity: 0.5,
     // 花瓣的数量
-    petalCount: 10,
+    petalCount: 20,
     // 是否开启花瓣阴影效果
     petalShadowEnabled: true,
     // 花瓣的阴影颜色及透明度
-    petalShadowColor: 'rgba(255, 128, 192, 1.0)',
-    // 花瓣阴影的扩散程度(Blur)
+    petalShadowColor: 'rgb(255, 128, 192)',
+    // 花瓣阴影的扩散程度
     petalShadowBlur: 10
   },
   // 时钟配置
