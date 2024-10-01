@@ -43,24 +43,27 @@ function getClass(findNumber, currentNumber) {
 onMounted(() => {
   // 获取节点，并动态设置字体大小
   const column = columnRef.value
-  if (column) {
-    const fontSize = computed(
-      () => (window.innerHeight * clockStore.sizeOfWindow) / 7
-    )
+  if (!column) return
 
-    const updateClockStyles = () => {
-      // 更新字体大小
-      const size = fontSize.value
-      column.style.fontSize = size + 'px'
-      column.style.lineHeight = size + 'px'
-    }
+  const fontSize = computed(
+    () => (window.innerHeight * clockStore.sizeOfWindow) / 7
+  )
 
-    // 初始化样式
-    updateClockStyles()
+  const updateClockStyles = () => {
+    // 更新字体大小
+    const size = fontSize.value
 
-    // 监听 fontSize 的变化
-    watch(fontSize, updateClockStyles)
+    column.style.color = clockStore.clockFontColor
+    column.style.fontSize = size + 'px'
+    column.style.lineHeight = size + 'px'
+    column.style.textShadow = `0 0 ${clockStore.clockFontShadowBlur}px ${clockStore.clockFontShadowColor}`
   }
+
+  // 初始化样式
+  updateClockStyles()
+
+  // 监听 fontSize 的变化
+  watch(clockStore.clockConfig, updateClockStyles)
 })
 
 // 向外暴露方法
@@ -88,23 +91,18 @@ defineExpose({ setOffset })
   }
 
   .visible {
-    text-shadow: 0 0 15px rgba(255, 128, 192, 1);
     opacity: 1;
   }
 
   .near {
-    color: rgba(255, 255, 255, 1);
-    text-shadow: 0 0 10px rgba(255, 128, 192, 1);
     opacity: 0.75;
   }
 
   .far {
-    color: rgba(255, 255, 255, 1);
     opacity: 0.5;
   }
 
   .distant {
-    color: rgba(255, 255, 255, 1);
     opacity: 0.3;
   }
 }

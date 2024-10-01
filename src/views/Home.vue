@@ -134,6 +134,33 @@ onMounted(() => {
         clockStore.clockConfig.sizeOfWindow =
           properties.clock_size_of_window.value
       }
+      // 时钟字体颜色
+      if (properties.clock_font_color) {
+        clockStore.clockConfig.clockFontColor = customColorAsCSS(
+          properties.clock_font_color.value
+        )
+      }
+      // 时钟字体阴影颜色
+      if (properties.clock_font_shadow_color) {
+        clockStore.clockConfig.clockFontShadowColor = customColorAsCSS(
+          properties.clock_font_shadow_color.value
+        )
+      }
+      // 时钟字体阴影扩散程度
+      if (properties.clock_font_shadow_blur) {
+        clockStore.clockConfig.clockFontShadowBlur =
+          properties.clock_font_shadow_blur.value
+      }
+      // 是否开启时钟背景模糊效果
+      if (properties.clock_backdrop_filter_enabled) {
+        clockStore.clockConfig.clockBackdropFilterEnabled =
+          properties.clock_backdrop_filter_enabled.value
+      }
+      // 时钟背景模糊程度
+      if (properties.clock_backdrop_filter_blur) {
+        clockStore.clockConfig.clockBackdropFilterBlur =
+          properties.clock_backdrop_filter_blur.value
+      }
     }
   }
 

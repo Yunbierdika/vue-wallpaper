@@ -39,10 +39,18 @@ onMounted(() => {
     // 设置时钟字体间距计算方式
     clock.style.letterSpacing = size / 10 + 'px'
 
+    if (clockStore.clockBackdropFilterEnabled) {
+      clock.style.backdropFilter = `blur(${clockStore.clockBackdropFilterBlur}px)`
+    } else {
+      clock.style.backdropFilter = 'none'
+    }
+
     // 设置冒号的样式
     colons.forEach((ele) => {
+      ele.style.color = clockStore.clockFontColor
       ele.style.fontSize = size + 'px'
       ele.style.lineHeight = size + 'px'
+      ele.style.textShadow = `0 0 ${clockStore.clockFontShadowBlur}px ${clockStore.clockFontShadowColor}`
     })
   }
 
@@ -50,7 +58,7 @@ onMounted(() => {
   updateClockStyles()
 
   // 监听 fontSize 的变化
-  watch(fontSize, updateClockStyles)
+  watch(clockStore.clockConfig, updateClockStyles)
 
   intervalId = setInterval(() => {
     // 获取时间
@@ -103,9 +111,7 @@ onUnmounted(() => {
   margin: 0 auto;
   border: 5px dotted #fff;
   border-radius: 50%;
-  color: rgba(255, 255, 255, 1);
   background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
   text-align: center;
   overflow: hidden;
   transform: translate(-50%, -50%);
@@ -115,7 +121,6 @@ onUnmounted(() => {
   display: inline-block;
   font-family: 'Verdana';
   vertical-align: top;
-  text-shadow: 0 0 10px rgba(255, 128, 192, 1);
   transform: translateY(-10px);
   transition: all 0.5s ease;
 

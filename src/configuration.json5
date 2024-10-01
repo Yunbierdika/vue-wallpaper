@@ -50,6 +50,16 @@
     // 是否开启时钟
     clockEnabled: true,
     // 时钟大小占浏览器窗口的比例
-    sizeOfWindow: 0.6
+    sizeOfWindow: 0.6,
+    // 时钟字体颜色
+    clockFontColor: 'rgb(255, 255, 255)',
+    // 时钟字体阴影颜色
+    clockFontShadowColor: 'rgb(255, 128, 192)',
+    // 时钟字体阴影扩散程度
+    clockFontShadowBlur: 10,
+    // 是否开启时钟背景模糊效果
+    clockBackdropFilterEnabled: true,
+    // 时钟背景模糊程度
+    clockBackdropFilterBlur: 5
   }
 }
