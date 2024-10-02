@@ -60,6 +60,8 @@
     // 是否开启时钟背景模糊效果
     clockBackdropFilterEnabled: true,
     // 时钟背景模糊程度
-    clockBackdropFilterBlur: 5
+    clockBackdropFilterBlur: 5,
+    // 是否开启时钟律动效果
+    clockMotionEnabled: true
   }
 }

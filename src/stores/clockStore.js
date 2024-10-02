@@ -27,6 +27,10 @@ export const useClockStore = defineStore('clock', () => {
   const clockBackdropFilterBlur = computed(
     () => clockConfig.value?.clockBackdropFilterBlur
   )
+  // 是否开启时钟律动效果
+  const clockMotionEnabled = computed(
+    () => clockConfig.value?.clockMotionEnabled
+  )
 
   return {
     clockConfig,
@@ -36,6 +40,7 @@ export const useClockStore = defineStore('clock', () => {
     clockFontShadowColor,
     clockFontShadowBlur,
     clockBackdropFilterEnabled,
-    clockBackdropFilterBlur
+    clockBackdropFilterBlur,
+    clockMotionEnabled
   }
 })

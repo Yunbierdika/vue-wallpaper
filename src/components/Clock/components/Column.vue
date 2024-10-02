@@ -82,7 +82,6 @@ defineExpose({ setOffset })
 .column {
   display: inline-block;
   font-family: 'Verdana';
-  vertical-align: top;
   transition: all 0.5s ease;
 
   .num {

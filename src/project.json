@@ -232,6 +232,13 @@
         "type": "slider",
         "value": 5
       },
+      "clock_motion_enabled": {
+        "index": 25,
+        "order": 125,
+        "text": "是否开启时钟律动效果",
+        "type": "bool",
+        "value": true
+      },
       "schemecolor": {
         "order": 0,
         "text": "ui_browse_properties_scheme_color",

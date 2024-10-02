@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, watch } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import AudioVisualization from '@/components/AudioVisualization/index.vue'
 import PetalFlake from '@/components/PetalFlake/index.vue'
 import Clock from '@/components/Clock/index.vue'
@@ -22,6 +22,11 @@ const petalFlakeStore = usePetalFlakeStore()
 // 配置store
 const configStore = useConfigStore()
 const { config, isLoaded } = storeToRefs(configStore)
+
+let animationFrameId = null
+
+const clockRef = ref(null)
+const audioVisualizationRef = ref(null)
 
 onMounted(() => {
   // 初始化配置
@@ -161,6 +166,11 @@ onMounted(() => {
         clockStore.clockConfig.clockBackdropFilterBlur =
           properties.clock_backdrop_filter_blur.value
       }
+      // 是否开启时钟律动效果
+      if (properties.clock_motion_enabled) {
+        clockStore.clockConfig.clockMotionEnabled =
+          properties.clock_motion_enabled.value
+      }
     }
   }
 
@@ -182,16 +192,45 @@ onMounted(() => {
     // 修改背景图片大小
     setBackgroundSize(document.body, windowWidth, windowHeight)
   })
+
+  function wallpaperAudioListener(audioArray) {
+    if (!audioArray) return
+
+    // 请求下一帧动画
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId)
+    }
+    animationFrameId = requestAnimationFrame(() => {
+      // 时钟律动动画绘制
+      // TODO：优化性能消耗
+      if (clockStore.clockEnabled && clockStore.clockMotionEnabled)
+        clockRef.value.drawAudioCircle(audioArray)
+      // 音频可视化动画绘制
+      if (audioVisualizationStore.audioVisualizationEnabled)
+        audioVisualizationRef.value.drawAudioBars(audioArray)
+    })
+  }
+
+  // 注册由 Wallpaper Engine 提供的音频监听器
+  window.wallpaperRegisterAudioListener(wallpaperAudioListener)
+})
+
+onBeforeUnmount(() => {
+  // 清除动画帧
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+  }
 })
 </script>
 
 <template>
   <div class="container">
     <!-- 时钟组件 -->
-    <Clock v-if="clockStore.clockEnabled" />
+    <Clock v-if="clockStore.clockEnabled" ref="clockRef" />
     <!-- 音频可视化组件 -->
     <AudioVisualization
       v-if="audioVisualizationStore.audioVisualizationEnabled"
+      ref="audioVisualizationRef"
     />
     <!-- 花瓣飘落组件 -->
     <PetalFlake v-if="petalFlakeStore.petalFlakeEnabled" />
@@ -200,7 +239,7 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

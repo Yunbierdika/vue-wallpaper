@@ -10,6 +10,8 @@ const clockStore = useClockStore()
 // 获取时钟节点
 const clockRef = ref(null)
 
+const circleRef = ref(null)
+
 // 用 ref([]) 创建数组来存储每个列和冒号的节点引用
 const colonRefs = ref([])
 const columnRefs = ref([])
@@ -17,12 +19,26 @@ const columnRefs = ref([])
 // 定时器id
 let intervalId = null
 
-onMounted(() => {
-  // 字体大小计算方式
-  const fontSize = computed(
-    () => (window.innerHeight * clockStore.sizeOfWindow) / 7
-  )
+// 字体大小计算方式
+const fontSize = computed(
+  () => (window.innerHeight * clockStore.sizeOfWindow) / 7
+)
 
+function drawAudioCircle(audioArray) {
+  const minSize = fontSize.value * 7
+
+  // 计算量太大，消耗性能
+  // const audioAvgValue = 1000 * (audioArray.reduce((acc, cur) => acc + cur, 0) / audioArray.length)
+
+  const audioAvgValue = Math.max(...audioArray.map(Number)) * 100
+
+  const size = Math.round(Math.max(minSize, minSize + audioAvgValue)) // 根据音频点数据计算大小
+  circleRef.value.style.width = `${size}px`
+  circleRef.value.style.height = `${size}px`
+  circleRef.value.style.transition = 'width 0.1s, height 0.1s'
+}
+
+onMounted(() => {
   const clock = clockRef.value
   const colons = colonRefs.value
   const columns = columnRefs.value
@@ -32,6 +48,9 @@ onMounted(() => {
   const updateClockStyles = () => {
     // 设置时钟大小
     const size = fontSize.value
+
+    circleRef.value.style.width = size * 7 + 'px'
+    circleRef.value.style.height = size * 7 + 'px'
 
     clock.style.width = size * 7 + 'px'
     clock.style.height = size * 7 + 'px'
@@ -79,41 +98,63 @@ onUnmounted(() => {
     clearInterval(intervalId)
   }
 })
+
+defineExpose({
+  drawAudioCircle
+})
 </script>
 
 <template>
-  <div class="clock" ref="clockRef">
-    <!-- 小时部分 -->
-    <Column :ref="(el) => (columnRefs[0] = el)" :numLength="3" />
-    <Column :ref="(el) => (columnRefs[1] = el)" :numLength="10" />
+  <div class="clockContainer">
+    <div ref="circleRef" class="circle">
+      <div class="clock" ref="clockRef">
+        <!-- 小时部分 -->
+        <Column :ref="(el) => (columnRefs[0] = el)" :numLength="3" />
+        <Column :ref="(el) => (columnRefs[1] = el)" :numLength="10" />
 
-    <!-- 冒号 -->
-    <div :ref="(el) => (colonRefs[0] = el)" class="colon"></div>
+        <!-- 冒号 -->
+        <div :ref="(el) => (colonRefs[0] = el)" class="colon"></div>
 
-    <!-- 分钟部分 -->
-    <Column :ref="(el) => (columnRefs[2] = el)" :numLength="6" />
-    <Column :ref="(el) => (columnRefs[3] = el)" :numLength="10" />
+        <!-- 分钟部分 -->
+        <Column :ref="(el) => (columnRefs[2] = el)" :numLength="6" />
+        <Column :ref="(el) => (columnRefs[3] = el)" :numLength="10" />
 
-    <!-- 冒号 -->
-    <div :ref="(el) => (colonRefs[1] = el)" class="colon"></div>
+        <!-- 冒号 -->
+        <div :ref="(el) => (colonRefs[1] = el)" class="colon"></div>
 
-    <!-- 秒数部分 -->
-    <Column :ref="(el) => (columnRefs[4] = el)" :numLength="6" />
-    <Column :ref="(el) => (columnRefs[5] = el)" :numLength="10" />
+        <!-- 秒数部分 -->
+        <Column :ref="(el) => (columnRefs[4] = el)" :numLength="6" />
+        <Column :ref="(el) => (columnRefs[5] = el)" :numLength="10" />
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="less" scoped>
+.clockContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+}
+
 .clock {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: 0 auto;
-  border: 5px dotted #fff;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15);
-  text-align: center;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: start;
   transform: translate(-50%, -50%);
 }
 
