@@ -38,19 +38,7 @@ function drawAudioBars(audioArray) {
     ctx.shadowBlur = 0
   }
 
-  // 开始绘制左声道
-  for (let i = 0; i < halfCount; ++i) {
-    const lerpHeight =
-      audioCanvas.height *
-      Math.min(
-        lerp(
-          previousAudioArray[i],
-          audioArray[i],
-          audioVisualizationStore.lerpFactor
-        ),
-        1
-      )
-
+  const drawRect = (lerpHeight, i) => {
     let height =
       lerpHeight <= audioCanvas.height * audioVisualizationStore.barHeightLimit
         ? lerpHeight
@@ -64,40 +52,26 @@ function drawAudioBars(audioArray) {
       barWidth * audioVisualizationStore.barWidthMultiplier,
       Math.max(height, audioVisualizationStore.barHeightInit)
     )
-
-    // 更新前一帧数据
-    previousAudioArray[i] = audioArray[i]
   }
 
-  // 绘制右声道
-  for (let i = halfCount; i < audioArray.length; ++i) {
+  // 绘制左声道
+  for (let i = 0; i < audioArray.length; ++i) {
     const lerpHeight =
       audioCanvas.height *
       Math.min(
         lerp(
           previousAudioArray[i],
-          audioArray[191 - i],
+          i < halfCount ? audioArray[i] : previousAudioArray[191 - i],
           audioVisualizationStore.lerpFactor
         ),
         1
       )
 
-    let height =
-      lerpHeight <= audioCanvas.height * audioVisualizationStore.barHeightLimit
-        ? lerpHeight
-        : audioCanvas.height * audioVisualizationStore.barHeightLimit
-
-    ctx.fillRect(
-      barWidth * i,
-      audioCanvas.height -
-        audioVisualizationStore.barYOffset -
-        Math.max(height, audioVisualizationStore.barHeightInit),
-      barWidth * audioVisualizationStore.barWidthMultiplier,
-      Math.max(height, audioVisualizationStore.barHeightInit)
-    )
+    drawRect(lerpHeight, i)
 
     // 更新前一帧数据
-    previousAudioArray[i] = audioArray[191 - i]
+    if (i < halfCount) previousAudioArray[i] = audioArray[i]
+    else previousAudioArray[i] = audioArray[191 - i]
   }
 }
 
