@@ -16,12 +16,12 @@ export function getCurrentTime(is_24_hour_clock) {
   return hour + '' + minute + '' + second
 }
 
-export function customColorAsCSS(color) {
+export function customColorAsCSS(color, isOnlyValue = false) {
   let customColor = color.split(' ')
   customColor = customColor.map(function (c) {
     return Math.ceil(c * 255)
   })
-  return 'rgb(' + customColor + ')'
+  return isOnlyValue ? customColor : 'rgb(' + customColor + ')'
 }
 
 export function setBackgroundSize(element, width, height) {

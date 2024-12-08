@@ -27,6 +27,20 @@ export const useClockStore = defineStore('clock', () => {
   const clockBackdropFilterBlur = computed(
     () => clockConfig.value?.clockBackdropFilterBlur
   )
+  // 时钟背景颜色
+  const clockBackgroundColor = computed(
+    () => clockConfig.value?.clockBackgroundColor
+  )
+  // 时钟背景透明度
+  const clockBackgroundOpacity = computed(
+    () => clockConfig.value?.clockBackgroundOpacity
+  )
+  // 时钟阴影颜色
+  const clockShadowColor = computed(() => clockConfig.value?.clockShadowColor)
+  // 时钟阴影模糊半径
+  const clockShadowBlur = computed(() => clockConfig.value?.clockShadowBlur)
+  // 时钟阴影扩散半径
+  const clockShadowSpread = computed(() => clockConfig.value?.clockShadowSpread)
   // 是否开启时钟律动效果
   const clockMotionEnabled = computed(
     () => clockConfig.value?.clockMotionEnabled
@@ -41,6 +55,11 @@ export const useClockStore = defineStore('clock', () => {
     clockFontShadowBlur,
     clockBackdropFilterEnabled,
     clockBackdropFilterBlur,
+    clockBackgroundColor,
+    clockBackgroundOpacity,
+    clockShadowColor,
+    clockShadowBlur,
+    clockShadowSpread,
     clockMotionEnabled
   }
 })

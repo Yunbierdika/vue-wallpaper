@@ -51,6 +51,9 @@ onMounted(() => {
 
     circleRef.value.style.width = size * 7 + 'px'
     circleRef.value.style.height = size * 7 + 'px'
+    // 设置时钟背景颜色及透明度
+    circleRef.value.style.backgroundColor = `rgba(${clockStore.clockBackgroundColor}, ${clockStore.clockBackgroundOpacity})`
+    circleRef.value.style.boxShadow = `0 0 ${clockStore.clockShadowBlur}px ${clockStore.clockShadowSpread}px ${clockStore.clockShadowColor}`
 
     clock.style.width = size * 7 + 'px'
     clock.style.height = size * 7 + 'px'
@@ -106,7 +109,7 @@ defineExpose({
 
 <template>
   <div class="clockContainer">
-    <div ref="circleRef" class="circle">
+    <div class="circle" ref="circleRef">
       <div class="clock" ref="clockRef">
         <!-- 小时部分 -->
         <Column :ref="(el) => (columnRefs[0] = el)" :numLength="3" />
@@ -144,7 +147,6 @@ defineExpose({
   position: absolute;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.4);
   overflow: hidden;
 }
 
