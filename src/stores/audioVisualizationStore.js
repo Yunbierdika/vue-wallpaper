@@ -13,6 +13,10 @@ export const useAudioVisualizationStore = defineStore(
     )
     // 音频条颜色
     const barColor = computed(() => audioVisualizationConfig.value?.barColor)
+    // 音频条透明度
+    const barOpacity = computed(
+      () => audioVisualizationConfig.value?.barOpacity
+    )
     // 是否开启音频条阴影
     const barShadowEnabled = computed(
       () => audioVisualizationConfig.value?.barShadowEnabled
@@ -50,6 +54,7 @@ export const useAudioVisualizationStore = defineStore(
       audioVisualizationConfig,
       audioVisualizationEnabled,
       barColor,
+      barOpacity,
       barShadowEnabled,
       barShadowColor,
       barShadowBlur,

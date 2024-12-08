@@ -200,8 +200,6 @@ onMounted(() => {
     { immediate: true }
   )
 
-  // resizeCanvas()
-
   // 渲染函数
   const render = () => {
     requestAnimationFrame(render)

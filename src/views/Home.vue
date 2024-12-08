@@ -58,6 +58,11 @@ onMounted(() => {
         audioVisualizationStore.audioVisualizationConfig.barColor =
           customColorAsCSS(properties.audio_bar_color.value)
       }
+      // 音频可视化透明度配置
+      if (properties.audio_bar_opacity) {
+        audioVisualizationStore.audioVisualizationConfig.barOpacity =
+          properties.audio_bar_opacity.value
+      }
       // 音频条阴影开关配置
       if (properties.audio_bar_shadow_enabled) {
         audioVisualizationStore.audioVisualizationConfig.barShadowEnabled =

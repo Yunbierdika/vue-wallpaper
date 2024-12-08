@@ -5,6 +5,8 @@
     audioVisualizationEnabled: true,
     // 音频条颜色
     barColor: 'rgb(255, 255, 255)',
+    // 音频条透明度
+    barOpacity: 0.65,
     // 是否开启音频条阴影效果
     barShadowEnabled: true,
     // 音频条阴影颜色
@@ -27,13 +29,13 @@
     // 是否开启花瓣飘落效果
     petalFlakeEnabled: true,
     // 花瓣的最大尺寸（实际尺寸为：这个值 * 0.5到1的随机数）
-    petalMaxSize: 50,
+    petalMaxSize: 40,
     // 花瓣的风速（实际速度为：这个值 / 尺寸）
-    petalWindSpeed: 150,
+    petalWindSpeed: 40,
     // 花瓣飘落角度（90度为垂直向下）
-    petalWindAngle: 45,
+    petalWindAngle: 135,
     // 花瓣的下落速度（实际速度为：尺寸 * 这个值）
-    petalFallSpeed: 10,
+    petalFallSpeed: 2,
     // 花瓣的透明度
     petalOpacity: 0.5,
     // 花瓣的数量

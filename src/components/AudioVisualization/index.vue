@@ -18,6 +18,8 @@ function drawAudioBars(audioArray) {
 
   // 获取画布的2D上下文
   const ctx = audioCanvas.getContext('2d')
+  // 将透明度应用到绘制上下文
+  ctx.globalAlpha = audioVisualizationStore.barOpacity
   // 清空画布但不设置任何颜色，从而保留背景图片
   ctx.clearRect(0, 0, audioCanvas.width, audioCanvas.height)
 
