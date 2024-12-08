@@ -55,13 +55,13 @@ function drawAudioBars(audioArray) {
   }
 
   // 绘制左声道
-  for (let i = 0; i < audioArray.length; ++i) {
+  for (let i = 0; i < audioArray.length; i++) {
     const lerpHeight =
       audioCanvas.height *
       Math.min(
         lerp(
           previousAudioArray[i],
-          i < halfCount ? audioArray[i] : previousAudioArray[191 - i],
+          i < halfCount ? audioArray[i] : audioArray[191 - i],
           audioVisualizationStore.lerpFactor
         ),
         1
@@ -70,8 +70,7 @@ function drawAudioBars(audioArray) {
     drawRect(lerpHeight, i)
 
     // 更新前一帧数据
-    if (i < halfCount) previousAudioArray[i] = audioArray[i]
-    else previousAudioArray[i] = audioArray[191 - i]
+    previousAudioArray[i] = i < halfCount ? audioArray[i] : audioArray[191 - i]
   }
 }
 
