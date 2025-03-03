@@ -21,7 +21,7 @@ let intervalId = null
 
 // 字体大小计算方式
 const fontSize = computed(
-  () => (window.innerHeight * clockStore.sizeOfWindow) / 7
+  () => (window.innerHeight * clockStore.sizeOfWindow) / 7,
 )
 
 function drawAudioCircle(audioArray) {
@@ -62,9 +62,9 @@ onMounted(() => {
     clock.style.letterSpacing = size / 10 + 'px'
 
     if (clockStore.clockBackdropFilterEnabled) {
-      clock.style.backdropFilter = `blur(${clockStore.clockBackdropFilterBlur}px)`
+      circleRef.value.style.backdropFilter = `blur(${clockStore.clockBackdropFilterBlur}px)`
     } else {
-      clock.style.backdropFilter = 'none'
+      circleRef.value.style.backdropFilter = 'none'
     }
 
     // 设置冒号的样式
@@ -103,7 +103,7 @@ onUnmounted(() => {
 })
 
 defineExpose({
-  drawAudioCircle
+  drawAudioCircle,
 })
 </script>
 
