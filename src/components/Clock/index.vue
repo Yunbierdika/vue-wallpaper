@@ -7,35 +7,96 @@ import { useClockStore } from '@/stores/clockStore'
 // 获取配置
 const clockStore = useClockStore()
 
+// 总容器节点
+const clockContainerRef = ref(null)
+
+// 波纹节点
+const rippleContainerRef = ref(null)
+const ripples = ref([])
+
+// 圆环节点
+const circleRef = ref(null)
+
 // 获取时钟节点
 const clockRef = ref(null)
-
-const circleRef = ref(null)
 
 // 用 ref([]) 创建数组来存储每个列和冒号的节点引用
 const colonRefs = ref([])
 const columnRefs = ref([])
 
-// 定时器id
+// 时钟定时器id
 let intervalId = null
 
-// 字体大小计算方式
+// 字体大小计算圆环和时钟的大小
 const fontSize = computed(
   () => (window.innerHeight * clockStore.sizeOfWindow) / 7,
 )
 
+// 添加波纹效果
+const addRipple = (size) => {
+  // 限制波纹数量
+  // if (ripples.value.length >= 5) return
+  const id = Date.now() + Math.random()
+  ripples.value.push({ id, size })
+}
+
+// 移除波纹
+const removeRipple = (id) => {
+  ripples.value = ripples.value.filter((ripple) => ripple.id !== id)
+}
+
+// 内阴影渐变效果定时器
+let fadeOutTimeout = null
+// 内阴影渐变透明度
+let shadowOpacity = 0
+// 内阴影渐变效果
+const fadeOut = () => {
+  fadeOutTimeout = setInterval(() => {
+    // 总容器设置内阴影渐变
+    clockContainerRef.value.style.boxShadow = `inset 0 0 50px 10px rgba(${clockStore.clockShadowColor}, ${shadowOpacity})`
+    shadowOpacity -= 0.05
+    if (shadowOpacity <= 0) {
+      shadowOpacity = 0
+      clearInterval(fadeOutTimeout)
+    }
+  }, 100)
+}
+
+// 绘制时钟律动效果
 function drawAudioCircle(audioArray) {
   const minSize = fontSize.value * 7
 
-  // 计算量太大，消耗性能
-  // const audioAvgValue = 1000 * (audioArray.reduce((acc, cur) => acc + cur, 0) / audioArray.length)
+  // 取低频平均值
+  const lowFreq = [...audioArray.slice(0, 16), ...audioArray.slice(64, 80)]
+  const lowAudioAvgValue = Math.round(
+    (lowFreq.reduce((sum, value) => sum + value, 0) / 32) * 1000,
+  )
 
-  const audioAvgValue = Math.max(...audioArray.map(Number)) * 100
+  // 取高频平均值
+  const highFreq = [...audioArray.slice(48, 64), ...audioArray.slice(112, 128)]
+  const highAudioAvgValue = Math.round(
+    (highFreq.reduce((sum, value) => sum + value, 0) / 32) * 1000,
+  )
 
-  const size = Math.round(Math.max(minSize, minSize + audioAvgValue)) // 根据音频点数据计算大小
-  circleRef.value.style.width = `${size}px`
-  circleRef.value.style.height = `${size}px`
-  circleRef.value.style.transition = 'width 0.1s, height 0.1s'
+  // 低频波纹、容器内阴影效果
+  if (lowAudioAvgValue >= clockStore.clockMotionLowLimit) {
+    shadowOpacity = 1
+    if (fadeOutTimeout) clearInterval(fadeOutTimeout)
+    // 内阴影效果
+    fadeOut()
+
+    // 波纹效果
+    const lowFreqSize = minSize + lowAudioAvgValue
+    addRipple(lowFreqSize)
+  }
+
+  // 高频圆环效果
+  if (highAudioAvgValue >= clockStore.clockMotionHighLimit) {
+    const highFreqSize = minSize + highAudioAvgValue / 10
+    circleRef.value.style.width = `${highFreqSize}px`
+    circleRef.value.style.height = `${highFreqSize}px`
+    circleRef.value.style.transition = 'width 0.1s, height 0.1s'
+  }
 }
 
 onMounted(() => {
@@ -49,11 +110,14 @@ onMounted(() => {
     // 设置时钟大小
     const size = fontSize.value
 
+    rippleContainerRef.value.style.width = size * 7 + 'px'
+    rippleContainerRef.value.style.height = size * 7 + 'px'
+
     circleRef.value.style.width = size * 7 + 'px'
     circleRef.value.style.height = size * 7 + 'px'
     // 设置时钟背景颜色及透明度
     circleRef.value.style.backgroundColor = `rgba(${clockStore.clockBackgroundColor}, ${clockStore.clockBackgroundOpacity})`
-    circleRef.value.style.boxShadow = `0 0 ${clockStore.clockShadowBlur}px ${clockStore.clockShadowSpread}px ${clockStore.clockShadowColor}`
+    circleRef.value.style.boxShadow = `0 0 ${clockStore.clockShadowBlur}px ${clockStore.clockShadowSpread}px rgb(${clockStore.clockShadowColor}), inset 0 0 ${clockStore.clockShadowBlur}px ${clockStore.clockShadowSpread}px rgb(${clockStore.clockShadowColor})`
 
     clock.style.width = size * 7 + 'px'
     clock.style.height = size * 7 + 'px'
@@ -97,9 +161,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   // 清除定时器，避免内存泄漏
-  if (intervalId) {
-    clearInterval(intervalId)
-  }
+  if (intervalId) clearInterval(intervalId)
+  if (fadeOutTimeout) clearInterval(fadeOutTimeout)
 })
 
 defineExpose({
@@ -108,7 +171,21 @@ defineExpose({
 </script>
 
 <template>
-  <div class="clockContainer">
+  <div class="clockContainer" ref="clockContainerRef">
+    <div class="ripple-container" ref="rippleContainerRef">
+      <!-- 遍历所有波纹 -->
+      <div
+        v-for="ripple in ripples"
+        :key="ripple.id"
+        class="ripple"
+        :style="{
+          width: ripple.size + 'px',
+          height: ripple.size + 'px',
+          boxShadow: `0 0 ${clockStore.clockShadowBlur}px ${clockStore.clockShadowSpread}px rgb(${clockStore.clockShadowColor})`,
+        }"
+        @animationend="removeRipple(ripple.id)"
+      ></div>
+    </div>
     <div class="circle" ref="circleRef">
       <div class="clock" ref="clockRef">
         <!-- 小时部分 -->
@@ -141,6 +218,27 @@ defineExpose({
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.ripple-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ripple {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  animation: ripple 500ms ease-out forwards;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }
 
 .circle {

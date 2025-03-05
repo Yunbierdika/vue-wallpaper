@@ -124,7 +124,7 @@ onMounted(() => {
       // 花瓣飘落阴影颜色配置
       if (properties.petal_flake_shadow_color) {
         petalFlakeStore.petalFlakeConfig.petalShadowColor = customColorAsCSS(
-          properties.petal_flake_shadow_color.value
+          properties.petal_flake_shadow_color.value,
         )
       }
       // 花瓣飘落阴影扩散程度配置
@@ -147,13 +147,13 @@ onMounted(() => {
       // 时钟字体颜色
       if (properties.clock_font_color) {
         clockStore.clockConfig.clockFontColor = customColorAsCSS(
-          properties.clock_font_color.value
+          properties.clock_font_color.value,
         )
       }
       // 时钟字体阴影颜色
       if (properties.clock_font_shadow_color) {
         clockStore.clockConfig.clockFontShadowColor = customColorAsCSS(
-          properties.clock_font_shadow_color.value
+          properties.clock_font_shadow_color.value,
         )
       }
       // 时钟字体阴影扩散程度
@@ -175,7 +175,7 @@ onMounted(() => {
       if (properties.clock_background_color) {
         clockStore.clockConfig.clockBackgroundColor = customColorAsCSS(
           properties.clock_background_color.value,
-          true
+          true,
         )
       }
       // 时钟背景透明度
@@ -186,7 +186,8 @@ onMounted(() => {
       // 时钟阴影颜色
       if (properties.clock_shadow_color) {
         clockStore.clockConfig.clockShadowColor = customColorAsCSS(
-          properties.clock_shadow_color.value
+          properties.clock_shadow_color.value,
+          true,
         )
       }
       // 时钟阴影模糊半径
@@ -204,7 +205,17 @@ onMounted(() => {
         clockStore.clockConfig.clockMotionEnabled =
           properties.clock_motion_enabled.value
       }
-    }
+      // 低频律动限制值
+      if (properties.clock_motion_low_limit) {
+        clockStore.clockConfig.clockMotionLowLimit =
+          properties.clock_motion_low_limit.value
+      }
+      // 高频律动限制值
+      if (properties.clock_motion_high_limit) {
+        clockStore.clockConfig.clockMotionHighLimit =
+          properties.clock_motion_high_limit.value
+      }
+    },
   }
 
   // 获取宽度
@@ -226,8 +237,14 @@ onMounted(() => {
     setBackgroundSize(document.body, windowWidth, windowHeight)
   })
 
+  let audioCache01 = null
+
   function wallpaperAudioListener(audioArray) {
     if (!audioArray) return
+
+    // 适当优化静止时的性能消耗
+    if (audioCache01 == null) audioCache01 = audioArray[0]
+    else if (audioCache01 == audioArray[0]) return
 
     // 请求下一帧动画
     if (animationFrameId) {
@@ -235,7 +252,6 @@ onMounted(() => {
     }
     animationFrameId = requestAnimationFrame(() => {
       // 时钟律动动画绘制
-      // TODO：优化性能消耗
       if (clockStore.clockEnabled && clockStore.clockMotionEnabled)
         clockRef.value.drawAudioCircle(audioArray)
       // 音频可视化动画绘制

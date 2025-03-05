@@ -10,7 +10,7 @@
     // 是否开启音频条阴影效果
     barShadowEnabled: true,
     // 音频条阴影颜色
-    barShadowColor: 'rgb(255, 128, 192)',
+    barShadowColor: 'rgb(190, 208, 250)',
     // 音频条的阴影扩散程度
     barShadowBlur: 20,
     // 音频条的宽度系数
@@ -22,7 +22,7 @@
     // 音频条Y轴偏移量
     barYOffset: 0,
     // 插值因子（推荐0.0~0.5之间，越大越平滑）
-    lerpFactor: 0.5
+    lerpFactor: 0.5,
   },
   // 花瓣飘落效果配置
   petalFlakeConfig: {
@@ -45,7 +45,7 @@
     // 花瓣的阴影颜色及透明度
     petalShadowColor: 'rgb(255, 255, 255)',
     // 花瓣阴影的扩散程度
-    petalShadowBlur: 15
+    petalShadowBlur: 15,
   },
   // 时钟配置
   clockConfig: {
@@ -56,7 +56,7 @@
     // 时钟字体颜色
     clockFontColor: 'rgb(255, 255, 255)',
     // 时钟字体阴影颜色
-    clockFontShadowColor: 'rgb(255, 128, 192)',
+    clockFontShadowColor: 'rgb(190, 208, 250)',
     // 时钟字体阴影扩散程度
     clockFontShadowBlur: 10,
     // 是否开启时钟背景模糊效果
@@ -64,16 +64,20 @@
     // 时钟背景模糊程度
     clockBackdropFilterBlur: 5,
     // 时钟背景颜色
-    clockBackgroundColor: '255, 128, 192',
+    clockBackgroundColor: '190, 208, 250',
     // 时钟背景透明度
     clockBackgroundOpacity: 0.15,
     // 时钟阴影颜色
-    clockShadowColor: 'rgb(255, 128, 192)',
+    clockShadowColor: '190, 208, 250',
     // 时钟阴影模糊半径
     clockShadowBlur: 50,
     // 时钟阴影扩散半径
     clockShadowSpread: 5,
     // 是否开启时钟律动效果
-    clockMotionEnabled: true
-  }
+    clockMotionEnabled: true,
+    // 低频律动限制值
+    clockMotionLowLimit: 100,
+    // 高频律动限制值
+    clockMotionHighLimit: 10,
+  },
 }

@@ -50,7 +50,7 @@
         "order": 105,
         "text": "音频条阴影颜色",
         "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
+        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
       },
       "audio_bar_shadow_blur": {
         "condition": "",
@@ -215,7 +215,7 @@
         "order": 122,
         "text": "时钟字体阴影颜色",
         "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
+        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
       },
       "clock_font_shadow_blur": {
         "fraction": false,
@@ -249,7 +249,7 @@
         "order": 126,
         "text": "时钟背景颜色",
         "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
+        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
       },
       "clock_background_opacity": {
         "fraction": true,
@@ -268,7 +268,7 @@
         "order": 128,
         "text": "时钟阴影颜色",
         "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
+        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
       },
       "clock_shadow_blur": {
         "fraction": false,
@@ -297,11 +297,31 @@
         "type": "bool",
         "value": true
       },
+      "clock_motion_low_limit": {
+        "fraction": false,
+        "index": 32,
+        "max": 300,
+        "min": 0,
+        "order": 132,
+        "text": "时钟低频律动限制值",
+        "type": "slider",
+        "value": 100
+      },
+      "clock_motion_high_limit": {
+        "fraction": false,
+        "index": 33,
+        "max": 300,
+        "min": 0,
+        "order": 133,
+        "text": "时钟高频律动限制值",
+        "type": "slider",
+        "value": 10
+      },
       "schemecolor": {
         "order": 0,
         "text": "ui_browse_properties_scheme_color",
         "type": "color",
-        "value": "1 0.5019607843137255 0.7529411764705882"
+        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
       }
     },
     "supportsaudioprocessing": true

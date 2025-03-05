@@ -13,27 +13,27 @@ export const useClockStore = defineStore('clock', () => {
   const clockFontColor = computed(() => clockConfig.value?.clockFontColor)
   // 时钟字体阴影颜色
   const clockFontShadowColor = computed(
-    () => clockConfig.value?.clockFontShadowColor
+    () => clockConfig.value?.clockFontShadowColor,
   )
   // 时钟字体阴影扩散程度
   const clockFontShadowBlur = computed(
-    () => clockConfig.value?.clockFontShadowBlur
+    () => clockConfig.value?.clockFontShadowBlur,
   )
   // 是否开启时钟背景模糊效果
   const clockBackdropFilterEnabled = computed(
-    () => clockConfig.value?.clockBackdropFilterEnabled
+    () => clockConfig.value?.clockBackdropFilterEnabled,
   )
   // 时钟背景模糊程度
   const clockBackdropFilterBlur = computed(
-    () => clockConfig.value?.clockBackdropFilterBlur
+    () => clockConfig.value?.clockBackdropFilterBlur,
   )
   // 时钟背景颜色
   const clockBackgroundColor = computed(
-    () => clockConfig.value?.clockBackgroundColor
+    () => clockConfig.value?.clockBackgroundColor,
   )
   // 时钟背景透明度
   const clockBackgroundOpacity = computed(
-    () => clockConfig.value?.clockBackgroundOpacity
+    () => clockConfig.value?.clockBackgroundOpacity,
   )
   // 时钟阴影颜色
   const clockShadowColor = computed(() => clockConfig.value?.clockShadowColor)
@@ -43,7 +43,15 @@ export const useClockStore = defineStore('clock', () => {
   const clockShadowSpread = computed(() => clockConfig.value?.clockShadowSpread)
   // 是否开启时钟律动效果
   const clockMotionEnabled = computed(
-    () => clockConfig.value?.clockMotionEnabled
+    () => clockConfig.value?.clockMotionEnabled,
+  )
+  // 低频律动限制值
+  const clockMotionLowLimit = computed(
+    () => clockConfig.value?.clockMotionLowLimit,
+  )
+  // 高频律动限制值
+  const clockMotionHighLimit = computed(
+    () => clockConfig.value?.clockMotionHighLimit,
   )
 
   return {
@@ -60,6 +68,8 @@ export const useClockStore = defineStore('clock', () => {
     clockShadowColor,
     clockShadowBlur,
     clockShadowSpread,
-    clockMotionEnabled
+    clockMotionEnabled,
+    clockMotionLowLimit,
+    clockMotionHighLimit,
   }
 })
