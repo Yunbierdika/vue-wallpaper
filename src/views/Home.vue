@@ -3,7 +3,7 @@ import { onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import AudioVisualization from '@/components/AudioVisualization/index.vue'
 import PetalFlake from '@/components/PetalFlake/index.vue'
 import Clock from '@/components/Clock/index.vue'
-import { customColorAsCSS, setBackgroundSize } from '@/utils'
+import { customColorAsCSS, setBackgroundSize, getThemeColor } from '@/utils'
 
 // stores
 import { storeToRefs } from 'pinia'
@@ -28,7 +28,7 @@ let animationFrameId = null
 const clockRef = ref(null)
 const audioVisualizationRef = ref(null)
 
-onMounted(() => {
+onMounted(async () => {
   // 初始化配置
   configStore.getConfig()
   watch(isLoaded, (val) => {
@@ -55,8 +55,9 @@ onMounted(() => {
       }
       // 音频可视化颜色配置
       if (properties.audio_bar_color) {
-        audioVisualizationStore.audioVisualizationConfig.barColor =
-          customColorAsCSS(properties.audio_bar_color.value)
+        if (customColorAsCSS(properties.audio_bar_color.value))
+          audioVisualizationStore.audioVisualizationConfig.barColor =
+            customColorAsCSS(properties.audio_bar_color.value)
       }
       // 音频可视化透明度配置
       if (properties.audio_bar_opacity) {
@@ -70,8 +71,9 @@ onMounted(() => {
       }
       // 音频可视化阴影颜色配置
       if (properties.audio_bar_shadow_color) {
-        audioVisualizationStore.audioVisualizationConfig.barShadowColor =
-          customColorAsCSS(properties.audio_bar_shadow_color.value)
+        if (customColorAsCSS(properties.audio_bar_shadow_color.value))
+          audioVisualizationStore.audioVisualizationConfig.barShadowColor =
+            customColorAsCSS(properties.audio_bar_shadow_color.value)
       }
       // 音频响应条阴影宽度
       if (properties.audio_bar_shadow_blur) {
@@ -123,9 +125,10 @@ onMounted(() => {
       }
       // 花瓣飘落阴影颜色配置
       if (properties.petal_flake_shadow_color) {
-        petalFlakeStore.petalFlakeConfig.petalShadowColor = customColorAsCSS(
-          properties.petal_flake_shadow_color.value,
-        )
+        if (customColorAsCSS(properties.petal_flake_shadow_color.value))
+          petalFlakeStore.petalFlakeConfig.petalShadowColor = customColorAsCSS(
+            properties.petal_flake_shadow_color.value,
+          )
       }
       // 花瓣飘落阴影扩散程度配置
       if (properties.petal_flake_shadow_blur) {
@@ -146,15 +149,17 @@ onMounted(() => {
       }
       // 时钟字体颜色
       if (properties.clock_font_color) {
-        clockStore.clockConfig.clockFontColor = customColorAsCSS(
-          properties.clock_font_color.value,
-        )
+        if (customColorAsCSS(properties.clock_font_color.value))
+          clockStore.clockConfig.clockFontColor = customColorAsCSS(
+            properties.clock_font_color.value,
+          )
       }
       // 时钟字体阴影颜色
       if (properties.clock_font_shadow_color) {
-        clockStore.clockConfig.clockFontShadowColor = customColorAsCSS(
-          properties.clock_font_shadow_color.value,
-        )
+        if (customColorAsCSS(properties.clock_font_shadow_color.value))
+          clockStore.clockConfig.clockFontShadowColor = customColorAsCSS(
+            properties.clock_font_shadow_color.value,
+          )
       }
       // 时钟字体阴影扩散程度
       if (properties.clock_font_shadow_blur) {
@@ -173,10 +178,10 @@ onMounted(() => {
       }
       // 时钟背景颜色
       if (properties.clock_background_color) {
-        clockStore.clockConfig.clockBackgroundColor = customColorAsCSS(
-          properties.clock_background_color.value,
-          true,
-        )
+        if (customColorAsCSS(properties.clock_background_color.value))
+          clockStore.clockConfig.clockBackgroundColor = customColorAsCSS(
+            properties.clock_background_color.value,
+          )
       }
       // 时钟背景透明度
       if (properties.clock_background_opacity) {
@@ -185,10 +190,10 @@ onMounted(() => {
       }
       // 时钟阴影颜色
       if (properties.clock_shadow_color) {
-        clockStore.clockConfig.clockShadowColor = customColorAsCSS(
-          properties.clock_shadow_color.value,
-          true,
-        )
+        if (customColorAsCSS(properties.clock_shadow_color.value))
+          clockStore.clockConfig.clockShadowColor = customColorAsCSS(
+            properties.clock_shadow_color.value,
+          )
       }
       // 时钟阴影模糊半径
       if (properties.clock_shadow_blur) {
@@ -223,7 +228,12 @@ onMounted(() => {
   // 获取高度
   let windowHeight = window.innerHeight
   // 设置背景图片
-  document.body.style.backgroundImage = 'url(background.jpg)'
+  document.body.style.backgroundImage = 'url(bg.jpg)'
+  // 获取并设置主题色
+  const themeColor = await getThemeColor('bg.jpg')
+  console.log('BackgroundThemeColor: ' + themeColor)
+  configStore.themeColor = themeColor
+
   // 设置背景图片大小
   setBackgroundSize(document.body, windowWidth, windowHeight)
 

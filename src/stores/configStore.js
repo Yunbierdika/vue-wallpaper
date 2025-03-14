@@ -6,9 +6,13 @@ export const useConfigStore = defineStore('config', () => {
   // 配置缓存
   const config = ref(null)
   // 判断是否已缓存好配置
-  const isLoaded = computed(() => config.value !== null)
+  const isLoaded = computed(
+    () => config.value !== null && themeColor.value !== null,
+  )
   // 判断各个store的配置是否缓存完毕
   const isAllLoaded = ref(false)
+  // 主题色
+  const themeColor = ref(null)
 
   //获取配置
   const getConfig = async () => {
@@ -23,6 +27,7 @@ export const useConfigStore = defineStore('config', () => {
     config,
     isLoaded,
     isAllLoaded,
-    getConfig
+    themeColor,
+    getConfig,
   }
 })

@@ -27,11 +27,14 @@ function drawAudioBars(audioArray) {
   const halfCount = audioArray.length / 2
 
   // 设置音频条颜色
-  ctx.fillStyle = audioVisualizationStore.barColor
+  ctx.fillStyle = `rgb(${audioVisualizationStore.barColor})`
 
   if (audioVisualizationStore.barShadowEnabled) {
+    console.log(`rgb(${audioVisualizationStore.barColor})`)
+    console.log(`rgb(${audioVisualizationStore.barShadowColor})`)
+
     // 添加阴影效果
-    ctx.shadowColor = audioVisualizationStore.barShadowColor
+    ctx.shadowColor = `rgb(${audioVisualizationStore.barShadowColor})`
     ctx.shadowBlur = audioVisualizationStore.barShadowBlur
     ctx.shadowOffsetX = 0
     ctx.shadowOffsetY = 0
@@ -52,7 +55,7 @@ function drawAudioBars(audioArray) {
         audioVisualizationStore.barYOffset -
         Math.max(height, audioVisualizationStore.barHeightInit),
       barWidth * audioVisualizationStore.barWidthMultiplier,
-      Math.max(height, audioVisualizationStore.barHeightInit)
+      Math.max(height, audioVisualizationStore.barHeightInit),
     )
   }
 
@@ -64,9 +67,9 @@ function drawAudioBars(audioArray) {
         lerp(
           previousAudioArray[i],
           i < halfCount ? audioArray[i] : audioArray[191 - i],
-          audioVisualizationStore.lerpFactor
+          audioVisualizationStore.lerpFactor,
         ),
-        1
+        1,
       )
 
     drawRect(lerpHeight, i)
@@ -82,7 +85,7 @@ onMounted(() => {
 })
 
 defineExpose({
-  drawAudioBars
+  drawAudioBars,
 })
 </script>
 

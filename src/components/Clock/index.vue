@@ -133,10 +133,10 @@ onMounted(() => {
 
     // 设置冒号的样式
     colons.forEach((ele) => {
-      ele.style.color = clockStore.clockFontColor
+      ele.style.color = `rgb(${clockStore.clockFontColor})`
       ele.style.fontSize = size + 'px'
       ele.style.lineHeight = size + 'px'
-      ele.style.textShadow = `0 0 ${clockStore.clockFontShadowBlur}px ${clockStore.clockFontShadowColor}`
+      ele.style.textShadow = `0 0 ${clockStore.clockFontShadowBlur}px rgb(${clockStore.clockFontShadowColor})`
     })
   }
 

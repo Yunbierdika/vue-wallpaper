@@ -1,7 +1,10 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { useConfigStore } from './configStore'
 
 export const useClockStore = defineStore('clock', () => {
+  const configStore = useConfigStore()
+
   // 缓存配置
   const clockConfig = ref(null)
 
@@ -10,10 +13,12 @@ export const useClockStore = defineStore('clock', () => {
   // 时钟大小占浏览器窗口的比例
   const sizeOfWindow = computed(() => clockConfig.value?.sizeOfWindow)
   // 时钟字体颜色
-  const clockFontColor = computed(() => clockConfig.value?.clockFontColor)
+  const clockFontColor = computed(
+    () => clockConfig.value?.clockFontColor || configStore.themeColor,
+  )
   // 时钟字体阴影颜色
   const clockFontShadowColor = computed(
-    () => clockConfig.value?.clockFontShadowColor,
+    () => clockConfig.value?.clockFontShadowColor || configStore.themeColor,
   )
   // 时钟字体阴影扩散程度
   const clockFontShadowBlur = computed(
@@ -29,14 +34,16 @@ export const useClockStore = defineStore('clock', () => {
   )
   // 时钟背景颜色
   const clockBackgroundColor = computed(
-    () => clockConfig.value?.clockBackgroundColor,
+    () => clockConfig.value?.clockBackgroundColor || configStore.themeColor,
   )
   // 时钟背景透明度
   const clockBackgroundOpacity = computed(
     () => clockConfig.value?.clockBackgroundOpacity,
   )
   // 时钟阴影颜色
-  const clockShadowColor = computed(() => clockConfig.value?.clockShadowColor)
+  const clockShadowColor = computed(
+    () => clockConfig.value?.clockShadowColor || configStore.themeColor,
+  )
   // 时钟阴影模糊半径
   const clockShadowBlur = computed(() => clockConfig.value?.clockShadowBlur)
   // 时钟阴影扩散半径

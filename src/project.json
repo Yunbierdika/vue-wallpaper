@@ -50,7 +50,7 @@
         "order": 105,
         "text": "音频条阴影颜色",
         "type": "color",
-        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
+        "value": ""
       },
       "audio_bar_shadow_blur": {
         "condition": "",
@@ -215,7 +215,7 @@
         "order": 122,
         "text": "时钟字体阴影颜色",
         "type": "color",
-        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
+        "value": ""
       },
       "clock_font_shadow_blur": {
         "fraction": false,
@@ -249,7 +249,7 @@
         "order": 126,
         "text": "时钟背景颜色",
         "type": "color",
-        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
+        "value": ""
       },
       "clock_background_opacity": {
         "fraction": true,
@@ -268,7 +268,7 @@
         "order": 128,
         "text": "时钟阴影颜色",
         "type": "color",
-        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
+        "value": ""
       },
       "clock_shadow_blur": {
         "fraction": false,
@@ -321,7 +321,7 @@
         "order": 0,
         "text": "ui_browse_properties_scheme_color",
         "type": "color",
-        "value": "0.7450980392156863 0.8156862745098039 0.9803921568627451"
+        "value": ""
       }
     },
     "supportsaudioprocessing": true

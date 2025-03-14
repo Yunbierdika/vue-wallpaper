@@ -4,13 +4,13 @@
     // 是否开启音频可视化
     audioVisualizationEnabled: true,
     // 音频条颜色
-    barColor: 'rgb(255, 255, 255)',
+    barColor: '255, 255, 255',
     // 音频条透明度
     barOpacity: 0.65,
     // 是否开启音频条阴影效果
     barShadowEnabled: true,
     // 音频条阴影颜色
-    barShadowColor: 'rgb(190, 208, 250)',
+    // barShadowColor: '255, 128, 192',
     // 音频条的阴影扩散程度
     barShadowBlur: 20,
     // 音频条的宽度系数
@@ -43,7 +43,7 @@
     // 是否开启花瓣阴影效果
     petalShadowEnabled: true,
     // 花瓣的阴影颜色及透明度
-    petalShadowColor: 'rgb(255, 255, 255)',
+    petalShadowColor: '255, 255, 255',
     // 花瓣阴影的扩散程度
     petalShadowBlur: 15,
   },
@@ -54,9 +54,9 @@
     // 时钟大小占浏览器窗口的比例
     sizeOfWindow: 0.6,
     // 时钟字体颜色
-    clockFontColor: 'rgb(255, 255, 255)',
+    clockFontColor: '255, 255, 255',
     // 时钟字体阴影颜色
-    clockFontShadowColor: 'rgb(190, 208, 250)',
+    clockFontShadowColor: '255, 128, 192',
     // 时钟字体阴影扩散程度
     clockFontShadowBlur: 10,
     // 是否开启时钟背景模糊效果
@@ -64,11 +64,11 @@
     // 时钟背景模糊程度
     clockBackdropFilterBlur: 5,
     // 时钟背景颜色
-    clockBackgroundColor: '190, 208, 250',
+    clockBackgroundColor: '255, 128, 192',
     // 时钟背景透明度
     clockBackgroundOpacity: 0.15,
     // 时钟阴影颜色
-    clockShadowColor: '190, 208, 250',
+    clockShadowColor: '255, 128, 192',
     // 时钟阴影模糊半径
     clockShadowBlur: 50,
     // 时钟阴影扩散半径

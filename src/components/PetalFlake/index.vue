@@ -134,7 +134,7 @@ onMounted(() => {
 
       if (petalFlakeStore.petalShadowEnabled) {
         // 添加阴影效果
-        ctx.shadowColor = petalFlakeStore.petalShadowColor
+        ctx.shadowColor = `rgb(${petalFlakeStore.petalShadowColor})`
         ctx.shadowBlur = petalFlakeStore.petalShadowBlur
         ctx.shadowOffsetX = 0
         ctx.shadowOffsetY = 0
@@ -146,7 +146,7 @@ onMounted(() => {
         -this.size / 2,
         -this.size / 2,
         this.size,
-        this.size
+        this.size,
       )
       ctx.restore()
       ctx.closePath()
@@ -197,7 +197,7 @@ onMounted(() => {
         resizeCanvas()
       }
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   // 渲染函数

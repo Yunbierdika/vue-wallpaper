@@ -5,7 +5,7 @@ import { useClockStore } from '@/stores/clockStore'
 const clockStore = useClockStore()
 
 const props = defineProps({
-  numLength: Number
+  numLength: Number,
 })
 
 // 组件引用
@@ -46,17 +46,17 @@ onMounted(() => {
   if (!column) return
 
   const fontSize = computed(
-    () => (window.innerHeight * clockStore.sizeOfWindow) / 7
+    () => (window.innerHeight * clockStore.sizeOfWindow) / 7,
   )
 
   const updateClockStyles = () => {
     // 更新字体大小
     const size = fontSize.value
 
-    column.style.color = clockStore.clockFontColor
+    column.style.color = `rgb(${clockStore.clockFontColor})`
     column.style.fontSize = size + 'px'
     column.style.lineHeight = size + 'px'
-    column.style.textShadow = `0 0 ${clockStore.clockFontShadowBlur}px ${clockStore.clockFontShadowColor}`
+    column.style.textShadow = `0 0 ${clockStore.clockFontShadowBlur}px rgb(${clockStore.clockFontShadowColor})`
   }
 
   // 初始化样式
