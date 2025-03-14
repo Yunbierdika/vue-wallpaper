@@ -10,7 +10,7 @@
     // 是否开启音频条阴影效果
     barShadowEnabled: true,
     // 音频条阴影颜色
-    // barShadowColor: '255, 128, 192',
+    barShadowColor: '255, 128, 192',
     // 音频条的阴影扩散程度
     barShadowBlur: 20,
     // 音频条的宽度系数
