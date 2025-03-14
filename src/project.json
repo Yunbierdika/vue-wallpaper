@@ -321,7 +321,7 @@
         "order": 0,
         "text": "ui_browse_properties_scheme_color",
         "type": "color",
-        "value": ""
+        "value": "1 0.5019607843137255 0.7529411764705882"
       }
     },
     "supportsaudioprocessing": true
