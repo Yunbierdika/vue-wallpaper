@@ -104,3 +104,12 @@ export async function getThemeColor(imgSrc) {
   }
   return themeColor
 }
+
+export function getHexColor(color) {
+  const [r, g, b] = color.split(',').map((s) => parseInt(s.trim(), 10))
+  const hexColor = `0x${[r, g, b]
+    .map((n) => n.toString(16).padStart(2, '0'))
+    .join('')
+    .toUpperCase()}`
+  return hexColor
+}

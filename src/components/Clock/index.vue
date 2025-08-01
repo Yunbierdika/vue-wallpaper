@@ -1,5 +1,12 @@
 <script setup>
-import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
+import {
+  onMounted,
+  onBeforeUnmount,
+  onUnmounted,
+  ref,
+  computed,
+  watch,
+} from 'vue'
 import { getCurrentTime } from '@/utils'
 import { useClockStore } from '@/stores/clockStore'
 import Column from './components/Column.vue'
@@ -94,45 +101,81 @@ onUnmounted(() => {
 })
 
 // 使用pixijs制作水波效果
-const pixiApp = new Application({
-  backgroundAlpha: 0,
-  resizeTo: window,
-})
-const container = new Container()
+let pixiApp = null
+let container = null
 
 let sprite = null
 let shockwaves = []
+
+// 同时创建水波的最大数量
+const maxShockwaves = 3
+
 onMounted(async () => {
-  clockContainerRef.value.appendChild(pixiApp.view)
+  pixiApp = new Application({
+    backgroundAlpha: 0,
+    resizeTo: window,
+    powerPreference: 'low-power',
+  })
+  container = new Container()
   pixiApp.stage.addChild(container)
+  clockContainerRef.value.appendChild(pixiApp.view)
 
   // 加一个背景图或纹理
   const texture = Texture.from('bg.jpg')
   sprite = new Sprite(texture)
   sprite.width = window.innerWidth
   sprite.height = window.innerHeight
+
   // 初始化滤镜
   sprite.filters = []
-  pixiApp.stage.addChild(sprite)
+  container.addChild(sprite)
 
   // 水波纹动画播放器
+  let lastTime = 0
+  const updateInterval = 16 // 约60FPS (1000ms/60 ≈ 16ms)
+
   pixiApp.ticker.add((delta) => {
-    // 更新水波纹动画
-    for (let i = shockwaves.length - 1; i >= 0; i--) {
+    const now = Date.now()
+    if (now - lastTime < updateInterval) return
+    lastTime = now
+
+    // 使用临时数组避免频繁修改原数组
+    const activeShockwaves = []
+
+    for (let i = 0; i < shockwaves.length; i++) {
       const filter = shockwaves[i]
-      // 水波动画速率
       filter.time += 0.03 * delta
-      if (filter.time >= 2) {
-        // 删除水波
-        sprite.filters.splice(i, 1)
-        shockwaves.splice(i, 1)
+
+      if (filter.time < 1.5) {
+        activeShockwaves.push(filter)
       }
+    }
+
+    // 批量更新滤镜
+    if (shockwaves.length !== activeShockwaves.length) {
+      shockwaves = activeShockwaves
+      sprite.filters = [...shockwaves]
     }
   })
 })
 
+onBeforeUnmount(() => {
+  if (pixiApp) {
+    pixiApp.destroy(true, { children: true, texture: true, baseTexture: true })
+    if (pixiApp.view && pixiApp.view.parentNode) {
+      pixiApp.view.parentNode.removeChild(pixiApp.view)
+    }
+    pixiApp = null
+  }
+  container = null
+  sprite = null
+})
+
 // 添加水波纹
 const addShockwave = () => {
+  // 限制水波数量
+  if (shockwaves.length >= maxShockwaves) return
+
   const shockwaveFilter = new ShockwaveFilter(
     [pixiApp.screen.width / 2, pixiApp.screen.height / 2],
     {
@@ -140,7 +183,7 @@ const addShockwave = () => {
       wavelength: 150, // 波长
       amplitude: 30, // 振幅
       brightness: 1, // 亮度
-      speed: 500, // 速度
+      speed: 1000, // 速度
     },
     0, // 初始时间
   )
@@ -153,7 +196,7 @@ function drawAudioCircle(audioArray) {
   const minSize = fontSize.value * 7
 
   // 取低频最大值
-  const lowFreq = [...audioArray.slice(0, 16)]
+  const lowFreq = [...audioArray.slice(0, 6)]
   const lowAudioMaxValue = Math.max(...lowFreq) * 1000
 
   // 取高频平均值

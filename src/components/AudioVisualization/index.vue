@@ -13,9 +13,9 @@ function lerp(start, end, factor) {
 // 保存前一帧的音频数据以进行插值
 let previousAudioArray = new Array(128).fill(0)
 
-function drawAudioBars(audioArray) {
-  const audioCanvas = audioCanvasRef.value
+const audioCanvas = audioCanvasRef.value
 
+function drawAudioBars(audioArray) {
   // 获取画布的2D上下文
   const ctx = audioCanvas.getContext('2d')
   // 将透明度应用到绘制上下文
@@ -30,9 +30,6 @@ function drawAudioBars(audioArray) {
   ctx.fillStyle = `rgb(${audioVisualizationStore.barColor})`
 
   if (audioVisualizationStore.barShadowEnabled) {
-    console.log(`rgb(${audioVisualizationStore.barColor})`)
-    console.log(`rgb(${audioVisualizationStore.barShadowColor})`)
-
     // 添加阴影效果
     ctx.shadowColor = `rgb(${audioVisualizationStore.barShadowColor})`
     ctx.shadowBlur = audioVisualizationStore.barShadowBlur
@@ -60,13 +57,13 @@ function drawAudioBars(audioArray) {
   }
 
   // 绘制左声道
-  for (let i = 0; i < audioArray.length; i++) {
+  for (let i = 0; i < halfCount; i++) {
     const lerpHeight =
       audioCanvas.height *
       Math.min(
         lerp(
           previousAudioArray[i],
-          i < halfCount ? audioArray[i] : audioArray[191 - i],
+          audioArray[i],
           audioVisualizationStore.lerpFactor,
         ),
         1,
@@ -75,13 +72,32 @@ function drawAudioBars(audioArray) {
     drawRect(lerpHeight, i)
 
     // 更新前一帧数据
-    previousAudioArray[i] = i < halfCount ? audioArray[i] : audioArray[191 - i]
+    previousAudioArray[i] = audioArray[i]
+  }
+
+  // 绘制右声道
+  for (let i = halfCount; i < audioArray.length; i++) {
+    const lerpHeight =
+      audioCanvas.height *
+      Math.min(
+        lerp(
+          previousAudioArray[i],
+          audioArray[191 - i],
+          audioVisualizationStore.lerpFactor,
+        ),
+        1,
+      )
+
+    drawRect(lerpHeight, i)
+
+    // 更新前一帧数据
+    previousAudioArray[i] = audioArray[191 - i]
   }
 }
 
 onMounted(() => {
-  audioCanvasRef.value.width = window.innerWidth
-  audioCanvasRef.value.height = window.innerHeight
+  audioCanvas.width = window.innerWidth
+  audioCanvas.height = window.innerHeight
 })
 
 defineExpose({
