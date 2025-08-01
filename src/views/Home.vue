@@ -231,7 +231,7 @@ onMounted(async () => {
   document.body.style.backgroundImage = 'url(bg.jpg)'
   // 获取并设置主题色
   const themeColor = await getThemeColor('bg.jpg')
-  console.log('BackgroundThemeColor: ' + themeColor)
+  // console.log('BackgroundThemeColor: ' + themeColor)
   configStore.themeColor = themeColor
 
   // 设置背景图片大小

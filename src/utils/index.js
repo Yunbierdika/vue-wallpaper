@@ -24,6 +24,39 @@ export function customColorAsCSS(color) {
   return customColor == 0 ? false : customColor
 }
 
+export function getCenterBackgroundSize(width, height) {
+  if (width * 9 != height * 16) {
+    if (width * 9 > height * 16) {
+      //屏幕过宽
+      let offsetWTop = ((width * 9) / 16 - height) / 2
+
+      return {
+        width: width,
+        height: (width * 9) / 16,
+        offsetX: '0',
+        offsetY: `-${offsetWTop}px`,
+      }
+    } else if (width * 9 < height * 16) {
+      //屏幕过高
+      let offsetWLeft = ((height * 16) / 9 - width) / 2
+
+      return {
+        width: (height * 16) / 9,
+        height: height,
+        offsetX: `-${offsetWLeft}px`,
+        offsetY: '0',
+      }
+    }
+  } else {
+    return {
+      width: width,
+      height: height,
+      offsetX: '0',
+      offsetY: '0',
+    }
+  }
+}
+
 export function setBackgroundSize(element, width, height) {
   //调整每张图片的大小
   const setStyle = (width, height) => {
@@ -46,6 +79,10 @@ export function setBackgroundSize(element, width, height) {
       element.style.backgroundPositionX = `-${offsetWLeft}px`
       element.style.backgroundPositionY = '0'
     }
+  } else {
+    setStyle(width, height)
+    element.style.backgroundPositionX = '0'
+    element.style.backgroundPositionY = '0'
   }
 }
 

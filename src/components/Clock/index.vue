@@ -7,7 +7,7 @@ import {
   computed,
   watch,
 } from 'vue'
-import { getCurrentTime } from '@/utils'
+import { getCenterBackgroundSize, getCurrentTime } from '@/utils'
 import { useClockStore } from '@/stores/clockStore'
 import Column from './components/Column.vue'
 
@@ -123,8 +123,14 @@ onMounted(async () => {
   // 加一个背景图或纹理
   const texture = Texture.from('bg.jpg')
   sprite = new Sprite(texture)
-  sprite.width = window.innerWidth
-  sprite.height = window.innerHeight
+  const { width, height, offsetX, offsetY } = getCenterBackgroundSize(
+    window.innerWidth,
+    window.innerHeight,
+  )
+  sprite.width = width
+  sprite.height = height
+  sprite.position.x = offsetX
+  sprite.position.y = offsetY
 
   // 初始化滤镜
   sprite.filters = []

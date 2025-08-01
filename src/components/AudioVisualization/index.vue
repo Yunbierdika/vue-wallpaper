@@ -13,9 +13,8 @@ function lerp(start, end, factor) {
 // 保存前一帧的音频数据以进行插值
 let previousAudioArray = new Array(128).fill(0)
 
-const audioCanvas = audioCanvasRef.value
-
 function drawAudioBars(audioArray) {
+  const audioCanvas = audioCanvasRef.value
   // 获取画布的2D上下文
   const ctx = audioCanvas.getContext('2d')
   // 将透明度应用到绘制上下文
@@ -96,8 +95,8 @@ function drawAudioBars(audioArray) {
 }
 
 onMounted(() => {
-  audioCanvas.width = window.innerWidth
-  audioCanvas.height = window.innerHeight
+  audioCanvasRef.value.width = window.innerWidth
+  audioCanvasRef.value.height = window.innerHeight
 })
 
 defineExpose({
