@@ -76,7 +76,7 @@
     // 是否开启时钟律动效果
     clockMotionEnabled: true,
     // 低频律动限制值
-    clockMotionLowLimit: 100,
+    clockMotionLowLimit: 200,
     // 高频律动限制值
     clockMotionHighLimit: 10,
   },

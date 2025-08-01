@@ -1,18 +1,17 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed, watch } from 'vue'
 import { getCurrentTime } from '@/utils'
-import Column from './components/Column.vue'
 import { useClockStore } from '@/stores/clockStore'
+import Column from './components/Column.vue'
+
+import { Application, Sprite, Container, Texture } from 'pixi.js'
+import { ShockwaveFilter } from '@pixi/filter-shockwave'
 
 // 获取配置
 const clockStore = useClockStore()
 
 // 总容器节点
 const clockContainerRef = ref(null)
-
-// 波纹节点
-const rippleContainerRef = ref(null)
-const ripples = ref([])
 
 // 圆环节点
 const circleRef = ref(null)
@@ -32,73 +31,6 @@ const fontSize = computed(
   () => (window.innerHeight * clockStore.sizeOfWindow) / 7,
 )
 
-// 添加波纹效果
-const addRipple = (size) => {
-  // 限制波纹数量
-  // if (ripples.value.length >= 5) return
-  const id = Date.now() + Math.random()
-  ripples.value.push({ id, size })
-}
-
-// 移除波纹
-const removeRipple = (id) => {
-  ripples.value = ripples.value.filter((ripple) => ripple.id !== id)
-}
-
-// 内阴影渐变效果定时器
-let fadeOutTimeout = null
-// 内阴影渐变透明度
-let shadowOpacity = 0
-// 内阴影渐变效果
-const fadeOut = () => {
-  fadeOutTimeout = setInterval(() => {
-    // 总容器设置内阴影渐变
-    clockContainerRef.value.style.boxShadow = `inset 0 0 50px 10px rgba(${clockStore.clockShadowColor}, ${shadowOpacity})`
-    shadowOpacity -= 0.05
-    if (shadowOpacity <= 0) {
-      shadowOpacity = 0
-      clearInterval(fadeOutTimeout)
-    }
-  }, 100)
-}
-
-// 绘制时钟律动效果
-function drawAudioCircle(audioArray) {
-  const minSize = fontSize.value * 7
-
-  // 取低频平均值
-  const lowFreq = [...audioArray.slice(0, 16), ...audioArray.slice(64, 80)]
-  const lowAudioAvgValue = Math.round(
-    (lowFreq.reduce((sum, value) => sum + value, 0) / 32) * 1000,
-  )
-
-  // 取高频平均值
-  const highFreq = [...audioArray.slice(48, 64), ...audioArray.slice(112, 128)]
-  const highAudioAvgValue = Math.round(
-    (highFreq.reduce((sum, value) => sum + value, 0) / 32) * 1000,
-  )
-
-  // 低频波纹、容器内阴影效果
-  if (lowAudioAvgValue >= clockStore.clockMotionLowLimit) {
-    shadowOpacity = 1
-    if (fadeOutTimeout) clearInterval(fadeOutTimeout)
-    // 内阴影效果
-    fadeOut()
-
-    // 波纹效果
-    const lowFreqSize = minSize + lowAudioAvgValue
-    addRipple(lowFreqSize)
-  }
-
-  // 高频圆环效果
-  if (highAudioAvgValue >= clockStore.clockMotionHighLimit) {
-    const highFreqSize = minSize + highAudioAvgValue / 10
-    circleRef.value.style.width = `${highFreqSize}px`
-    circleRef.value.style.height = `${highFreqSize}px`
-    circleRef.value.style.transition = 'width 0.1s, height 0.1s'
-  }
-}
-
 onMounted(() => {
   const clock = clockRef.value
   const colons = colonRefs.value
@@ -109,9 +41,6 @@ onMounted(() => {
   const updateClockStyles = () => {
     // 设置时钟大小
     const size = fontSize.value
-
-    rippleContainerRef.value.style.width = size * 7 + 'px'
-    rippleContainerRef.value.style.height = size * 7 + 'px'
 
     circleRef.value.style.width = size * 7 + 'px'
     circleRef.value.style.height = size * 7 + 'px'
@@ -162,8 +91,91 @@ onMounted(() => {
 onUnmounted(() => {
   // 清除定时器，避免内存泄漏
   if (intervalId) clearInterval(intervalId)
-  if (fadeOutTimeout) clearInterval(fadeOutTimeout)
 })
+
+// 使用pixijs制作水波效果
+const pixiApp = new Application({
+  backgroundAlpha: 0,
+  resizeTo: window,
+})
+const container = new Container()
+
+let sprite = null
+let shockwaves = []
+onMounted(async () => {
+  clockContainerRef.value.appendChild(pixiApp.view)
+  pixiApp.stage.addChild(container)
+
+  // 加一个背景图或纹理
+  const texture = Texture.from('bg.jpg')
+  sprite = new Sprite(texture)
+  sprite.width = window.innerWidth
+  sprite.height = window.innerHeight
+  // 初始化滤镜
+  sprite.filters = []
+  pixiApp.stage.addChild(sprite)
+
+  // 水波纹动画播放器
+  pixiApp.ticker.add((delta) => {
+    // 更新水波纹动画
+    for (let i = shockwaves.length - 1; i >= 0; i--) {
+      const filter = shockwaves[i]
+      // 水波动画速率
+      filter.time += 0.03 * delta
+      if (filter.time >= 2) {
+        // 删除水波
+        sprite.filters.splice(i, 1)
+        shockwaves.splice(i, 1)
+      }
+    }
+  })
+})
+
+// 添加水波纹
+const addShockwave = () => {
+  const shockwaveFilter = new ShockwaveFilter(
+    [pixiApp.screen.width / 2, pixiApp.screen.height / 2],
+    {
+      radius: -1, // 初始半径
+      wavelength: 150, // 波长
+      amplitude: 30, // 振幅
+      brightness: 1, // 亮度
+      speed: 500, // 速度
+    },
+    0, // 初始时间
+  )
+  sprite.filters.push(shockwaveFilter)
+  shockwaves.push(shockwaveFilter)
+}
+
+// 绘制时钟律动效果
+function drawAudioCircle(audioArray) {
+  const minSize = fontSize.value * 7
+
+  // 取低频最大值
+  const lowFreq = [...audioArray.slice(0, 16)]
+  const lowAudioMaxValue = Math.max(...lowFreq) * 1000
+
+  // 取高频平均值
+  const highFreq = [...audioArray.slice(48, 64)]
+  const highAudioAvgValue = Math.round(
+    (highFreq.reduce((sum, value) => sum + value, 0) / 16) * 1000,
+  )
+
+  // 低频波纹、容器内阴影效果
+  if (lowAudioMaxValue >= clockStore.clockMotionLowLimit) {
+    // 波纹效果
+    addShockwave()
+  }
+
+  // 高频圆环效果
+  if (highAudioAvgValue >= clockStore.clockMotionHighLimit) {
+    const highFreqSize = minSize + highAudioAvgValue / 10
+    circleRef.value.style.width = `${highFreqSize}px`
+    circleRef.value.style.height = `${highFreqSize}px`
+    circleRef.value.style.transition = 'width 0.1s, height 0.1s'
+  }
+}
 
 defineExpose({
   drawAudioCircle,
@@ -172,20 +184,6 @@ defineExpose({
 
 <template>
   <div class="clockContainer" ref="clockContainerRef">
-    <div class="ripple-container" ref="rippleContainerRef">
-      <!-- 遍历所有波纹 -->
-      <div
-        v-for="ripple in ripples"
-        :key="ripple.id"
-        class="ripple"
-        :style="{
-          width: ripple.size + 'px',
-          height: ripple.size + 'px',
-          boxShadow: `0 0 ${clockStore.clockShadowBlur}px ${clockStore.clockShadowSpread}px rgb(${clockStore.clockShadowColor})`,
-        }"
-        @animationend="removeRipple(ripple.id)"
-      ></div>
-    </div>
     <div class="circle" ref="circleRef">
       <div class="clock" ref="clockRef">
         <!-- 小时部分 -->

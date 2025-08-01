@@ -11,9 +11,12 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@pixi/filter-drop-shadow": "^5.2.0",
+    "@pixi/filter-shockwave": "^5.1.1",
     "json5": "^2.2.3",
     "less": "^4.2.1",
     "pinia": "^2.3.0",
+    "pixi.js": "7.x",
     "vite-plugin-static-copy": "^1.0.6",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"

@@ -300,7 +300,7 @@
       "clock_motion_low_limit": {
         "fraction": false,
         "index": 32,
-        "max": 300,
+        "max": 800,
         "min": 0,
         "order": 132,
         "text": "时钟低频律动限制值",

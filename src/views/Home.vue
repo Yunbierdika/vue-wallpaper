@@ -263,10 +263,10 @@ onMounted(async () => {
     animationFrameId = requestAnimationFrame(() => {
       // 时钟律动动画绘制
       if (clockStore.clockEnabled && clockStore.clockMotionEnabled)
-        clockRef.value.drawAudioCircle(audioArray)
+        clockRef.value?.drawAudioCircle(audioArray)
       // 音频可视化动画绘制
       if (audioVisualizationStore.audioVisualizationEnabled)
-        audioVisualizationRef.value.drawAudioBars(audioArray)
+        audioVisualizationRef.value?.drawAudioBars(audioArray)
     })
   }
 
